@@ -1,0 +1,41 @@
+{
+    "easycom": {
+        "autoscan": false,
+        "custom": {
+            "^fui-(.*)": "@/uni-modules/firstui/fui-$1/fui-$1.vue",
+            "^PageContainer": "@/shared/components/page-container/page-container.vue",
+            "^UploadGallery": "@/shared/components/upload-gallery.vue",
+            "^UploadProgress": "@/shared/components/upload-progress.vue",
+            "^SvgIcon": "@/shared/components/svg-icon.vue"
+        }
+    },
+    "pages": [
+        {
+            "path": "pages/index/index",
+            "style": {
+                "navigationBarTitleText": "首页"
+            },
+            "meta": {
+                "needLogin": false
+            }
+        },
+        {
+            "path": "pages/test-01/index",
+            "style": {
+                "navigationBarTitleText": "测试"
+            },
+            "meta": {
+                "needLogin": false
+            }
+        }
+    ],
+    "globalStyle": {
+        // #ifdef H5
+        "navigationStyle": "custom",
+        // #endif
+        "navigationBarTextStyle": "black",
+        "navigationBarTitleText": "uni-app",
+        "navigationBarBackgroundColor": "#F8F8F8",
+        "backgroundColor": "#F8F8F8"
+    }
+}
