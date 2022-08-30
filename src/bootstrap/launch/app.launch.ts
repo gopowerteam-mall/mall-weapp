@@ -1,6 +1,7 @@
 import { useLogin } from '@/shared/hooks'
 import { UpdateService } from '@/shared/utils/update.service'
 import { pages } from '@/pages.json'
+import { withCtx } from 'vue'
 
 const logger = useLogger()
 
@@ -74,6 +75,12 @@ async function tabbarInterceptor() {
     })
 }
 
+function userLogin() {
+    // return new Promise(resolve => {
+    //     uni.login({ provider: 'weixin' ,success:({code})=>{
+    //     })
+    // })
+}
 /**
  * 系统启动列表
  * @returns

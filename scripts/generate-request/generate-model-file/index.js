@@ -92,9 +92,11 @@ function getOriginalRef(propertyConfig) {
 }
 
 function getPropertyType(config) {
+    const ref = config.$ref || config['allOf']?.[0]?.$ref
+
     switch (true) {
-        case !!config.$ref:
-            return config.$ref.replace('#/components/schemas/', '')
+        case !!ref:
+            return ref.replace('#/components/schemas/', '')
         case config.type === 'integer':
             return 'number'
         case config.type === 'string' && config.format === 'date-time':
@@ -102,7 +104,6 @@ function getPropertyType(config) {
         case config.type === 'array':
             return `${getPropertyType(config.items)}[]`
     }
-
     return config.type
 }
 
@@ -115,7 +116,8 @@ function getPropertyType(config) {
 async function writeModelFile(service, content) {
     const modelDirectionPath = service.config.modelDir
 
-    const path = resolve(modelDirectionPath, `${service.key}.model.ts`)
+    const name = service.key ? `${service.key}.model.ts` : 'index.ts'
+    const path = resolve(modelDirectionPath, name)
 
     await mkdirp.sync(dirname(path))
     await writeFileSync(path, content, ENCODING)

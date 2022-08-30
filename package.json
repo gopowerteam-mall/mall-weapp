@@ -9,6 +9,7 @@
     "scripts": {
         "doc": "docsify serve docs",
         "update:request": "node ./scripts/generate-request/index.js",
+        "postupdate:request": "prettier --write \"./src/http/**/*.ts\"",
         "log": "conventional-changelog -i README.md -s -r 0",
         "commit": "node ./node_modules/cz-customizable/standalone.js",
         "prepare": "husky install",

@@ -203,25 +203,27 @@ function createControllers(service, controllers, paths, tags) {
 function getActionReponseShema(service, responses) {
     const response = responses['200']
 
-    if (!response || !response.schema || !service.config.model) {
-        return
+    if (
+        response &&
+        response.content &&
+        response.content['application/json'] &&
+        response.content['application/json']['schema']
+    ) {
+        return getPropertyType(response.content['application/json']['schema'])
     }
-
-    const { schema } = response
-
-    return getPropertyType(schema)
 }
 
 function getPropertyType(schema) {
     switch (true) {
-        case !!schema.originalRef:
-            if (schema.originalRef.startsWith('Map«')) return
-
-            return schema.originalRef
-                .replace(/^Page«/, '')
-                .replace(/^Iterable«/, '')
-                .replace(/»$/, '[]')
-
+        case !!schema.$ref:
+            const ref = schema.$ref.replace('#/components/schemas/', '')
+            if (ref.startsWith('Map')) return
+            return ref.startsWith('Page')
+                ? ref
+                      .replace(/^Page/, '')
+                      .replace(/^Iterable«/, '')
+                      .replace(/$/, '[]')
+                : ref
         case schema.type === 'array':
             const type = getPropertyType(schema.items)
             return type && `${type}[]`
@@ -235,7 +237,7 @@ function getPropertyType(schema) {
 function generate(service) {
     fetch(service.url, { method: 'GET' })
         .then(res => res.json()) // expecting a json response
-        .then(({ tags, paths, definitions }) => {
+        .then(({ tags, paths, definitions, components }) => {
             info('-------------------------')
             info('服务名称', service.name || '无')
             info('服务路径', service.url)
@@ -250,7 +252,7 @@ function generate(service) {
             generateServiceFiles(service, controllers)
 
             if (configJson.model) {
-                generateModelFiles(service, definitions)
+                generateModelFiles(service, components)
             }
         })
 }

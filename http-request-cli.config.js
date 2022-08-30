@@ -1,24 +1,22 @@
 module.exports = {
     name: 'default',
-    gateway: '',
-    swagger: 'v2/api-docs',
+    gateway: 'https://mall-service.gopowerteam.cn',
+    swagger: 'weapp/api-docs',
     model: true,
     modelDir: {
         alias: '@/http/model', // 控制器目录名别
         path: './src/http/model' // 控制器目录路径
     },
     controllerDir: {
-        alias: '@/http/controller', // 控制器目录名别
-        path: './src/http/controller' // 控制器目录路径
+        alias: '@/http/controllers', // 控制器目录名别
+        path: './src/http/controllers' // 控制器目录路径
     },
     serviceDir: {
         alias: '@/http/services', // 服务目录名别
         path: './src/http/services' // 服务目录名别
     },
-    services: {},
-    controllerResolver: (_, currentTag, tags) => (
-        ([tag] = currentTag),
-        ({ description } = tags.find(x => x.name === tag)),
-        description.replace(/\s/g, '').replace(/Controller$/g, '')
-    )
+    controllerResolver: (_, currentTag) => {
+        const [tag] = currentTag || []
+        return tag.replace(/^\S/, s => s.toUpperCase())
+    }
 }
