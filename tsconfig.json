@@ -8,6 +8,7 @@
         "jsx": "preserve",
         "sourceMap": true,
         "allowJs": true,
+        "importHelpers": true,
         "resolveJsonModule": true,
         "strictPropertyInitialization": false,
         "noImplicitAny": false,
