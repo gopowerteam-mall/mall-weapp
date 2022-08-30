@@ -5,7 +5,7 @@
 import { RequestAction, RequestParams } from '@/http/core'
 import type { Observable } from 'rxjs'
 import { AppController } from '@/http/controllers/app.controller'
-import { AppBaseResponse, TokenResponse, User } from '@/http/model/.model'
+import { AppBaseResponse, TokenResponse, User } from '@/http/model'
 
 export class AppService {
     /**

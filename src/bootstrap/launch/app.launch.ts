@@ -74,12 +74,6 @@ async function tabbarInterceptor() {
     })
 }
 
-function userLogin() {
-    // return new Promise(resolve => {
-    //     uni.login({ provider: 'weixin' ,success:({code})=>{
-    //     })
-    // })
-}
 /**
  * 系统启动列表
  * @returns

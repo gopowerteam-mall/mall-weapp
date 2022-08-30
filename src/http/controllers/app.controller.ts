@@ -24,7 +24,7 @@ export const AppController = {
         service,
         controller,
         path: '/api/weapp/app/login',
-        type: RequestMethod.Post
+        type: RequestMethod.Get
     },
     // 刷新Token
     token: {

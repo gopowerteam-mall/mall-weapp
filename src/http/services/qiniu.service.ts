@@ -5,7 +5,7 @@
 import { RequestAction, RequestParams } from '@/http/core'
 import type { Observable } from 'rxjs'
 import { QiniuController } from '@/http/controllers/qiniu.controller'
-import { GetUploadTokenResponse } from '@/http/model/.model'
+import { GetUploadTokenResponse } from '@/http/model'
 
 export class QiniuService {
     /**

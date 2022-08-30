@@ -1,3 +1,4 @@
+import { User } from '@/http/model'
 import { defineStore } from 'pinia'
 import { Ref } from 'vue'
 import { useStorage } from '.'
@@ -6,12 +7,9 @@ import { useStorage } from '.'
  * State数据结构
  */
 interface State {
-    token: Ref<string>
-    code: Ref<string>
-    key: Ref<string>
-    /**
-     * 当前用户信息
-     */
+    accessToken: Ref<string>
+    refreshToken: Ref<string>
+    // 用户信息
     current?: User
 }
 
@@ -20,36 +18,27 @@ interface State {
  * @returns
  */
 const createState = (): State => ({
-    token: useStorage('user.token', ''),
-    key: useStorage('user.key', ''),
-    code: useStorage('user.code', ''),
+    accessToken: useStorage('user.access-token', ''),
+    refreshToken: useStorage('user.refresh-token', ''),
+    // 用户信息
     current: undefined
 })
 
 export const store = defineStore('user', {
     state: createState,
     actions: {
-        updateKey(value: string) {
-            this.key = value
+        updateToken({
+            accessToken,
+            refreshToken
+        }: {
+            accessToken: string
+            refreshToken: string
+        }) {
+            this.accessToken = accessToken
+            this.refreshToken = refreshToken
         },
-        updateToken(value: string) {
-            this.token = value
-        },
-        updateCode(value: string) {
-            this.code = value
-        },
-        updateCurrent(value: any) {
-            this.current = value
-        },
-        /**
-         * 更新用户信息
-         */
-        updateUserData() {
-            // TODO: 更新用户数据
+        updateCurrent(user: User) {
+            this.current = user
         }
     }
 })
-
-interface User {
-    // 用户数据结构
-}

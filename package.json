@@ -6,6 +6,11 @@
             "@commitlint/config-conventional"
         ]
     },
+    "config": {
+        "commitizen": {
+            "path": "node_modules/cz-customizable"
+        }
+    },
     "scripts": {
         "update:request": "node ./scripts/generate-request/index.js",
         "postupdate:request": "prettier --write \"./src/http/**/*.ts\"",
@@ -87,6 +92,7 @@
         "@vue/eslint-config-typescript": "11.0.0",
         "@vueuse/shared": "^9.1.1",
         "autoprefixer": "10.4.8",
+        "chalk": "4.1.2",
         "cz-customizable": "6.9.2",
         "eslint": "8.23.0",
         "eslint-plugin-vue": "9.4.0",
@@ -94,10 +100,12 @@
         "hjson": "3.2.2",
         "husky": "8.0.1",
         "lint-staged": "13.0.3",
+        "mkdirp": "^1.0.4",
         "nanoid": "4.0.0",
         "node-fetch": "2",
         "prettier": "2.7.1",
         "pug": "3.0.2",
+        "rimraf": "^3.0.2",
         "sass": "1.54.6",
         "sass-loader": "13.0.2",
         "svgo": "2.8.0",

@@ -5,6 +5,9 @@ export const appConfig = {
     wechat: {
         appid: import.meta.env.VITE_APP_WECHAT_APPID as string
     },
+    weapp: {
+        appid: import.meta.env.VITE_APP_WEAPP_APPID as string
+    },
     storage: {
         public: 'cos',
         private: 'cos'

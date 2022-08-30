@@ -1,6 +1,7 @@
 import getAppLaunchTasks from '../launch/app.launch'
 import getUserLaunchTasks from '../launch/user.launch'
-import qs from 'qs'
+import { useRequest } from 'virtual:http-request'
+import { lastValueFrom } from 'rxjs'
 
 const logger = useLogger()
 /**
@@ -16,20 +17,45 @@ async function appLaunch() {
  * @returns
  */
 async function updateUserToken() {
-    // TODO: 通过Code更新TOKEN
+    const appService = useRequest(service => service.AppService)
+    const userStore = useStore(store => store.user)
+    return new Promise<void>(resolve => {
+        uni.login({
+            provider: 'weixin',
+            success: ({ code }) => {
+                appService
+                    .login({
+                        code
+                    })
+                    .subscribe(data => {
+                        userStore.updateToken({
+                            accessToken: data.access_token,
+                            refreshToken: data.refresh_token
+                        })
+
+                        resolve()
+                    })
+            }
+        })
+    })
 }
 
 /**
  * 获取用户信息
  * @returns
  */
-async function updateUserData() {
-    const store = useStore(store => store.user)
+async function updateUserInfo() {
+    const userStore = useStore(store => store.user)
 
-    if (store.token) {
-        // TODO: 获取用户数据
-        return store.updateUserData()
+    if (!userStore.accessToken) {
+        return
     }
+
+    const appService = useRequest(service => service.AppService)
+
+    return lastValueFrom(appService.getCurrentUser()).then(data => {
+        userStore.updateCurrent(data)
+    })
 }
 
 /**
@@ -39,81 +65,13 @@ async function userLaunch() {
     const store = useStore(store => store.user)
     // 获取用户Token
     await updateUserToken()
-    // TODO:更新用户信息
-    await updateUserData()
+
+    // 更新用户信息
+    await updateUserInfo()
     // 同步并获取应用
     if (store.current) {
         await Promise.all(getUserLaunchTasks())
     }
-}
-
-/**
- * 用户初始状态检测
- * @returns
- */
-async function userStateCheck() {
-    const store = useStore(store => store.user)
-
-    // 用户存在登录记录
-    if (store.token) {
-        return true
-    }
-
-    // 获取用户Code状态
-    let result: boolean | undefined = true
-
-    // #ifdef H5
-    result = await h5CodeCheck()
-    // #endif
-    // #ifdef MP-WEIXIN
-    result = await weappCodeCheck()
-    // #endif
-    // #ifdef APP-PLUS
-    result = true
-    // #endif
-
-    return result
-}
-
-/**
- * H5用户CODE验证
- */
-function h5CodeCheck() {
-    const store = useStore(store => store.user)
-
-    // 读取用户CODE
-    const { code } =
-        qs.parse(location.search, { ignoreQueryPrefix: true }) || {}
-
-    // 验证用户CODE
-    if (!code || code === store.code) {
-        // AuthService.requestUserCode()
-    } else {
-        store.updateCode(code as string)
-        return true
-    }
-}
-
-/**
- * 小程序用户CODE验证
- * @returns
- */
-function weappCodeCheck(): Promise<boolean> {
-    const store = useStore(store => store.user)
-
-    // 读取用户CODE
-    return new Promise((resolve, reject) => {
-        uni.login({
-            provider: 'weixin',
-            success: ({ code }) => {
-                store.updateCode(code)
-                resolve(true)
-            },
-            fail: () => {
-                reject(false)
-            }
-        })
-    })
 }
 
 /**
@@ -123,19 +81,13 @@ export default async function () {
     const store = useStore(store => store.app)
     // 检测系统启动状态
     if (store.ready) return
+
     // 系统启动逻辑
     await appLaunch()
+
     // 用户启动逻辑
     await userLaunch()
 
-    // 用户初始状态检测
-    // if (!userStateCheck()) {
-    //     return false
-    // }
-
     // 系统初始化完成
     store.updateReady()
-
-    // // 安装认证守卫
-    // registerGuard(authGuard)
 }
