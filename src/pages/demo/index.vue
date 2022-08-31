@@ -1,35 +1,15 @@
 <template lang="pug">
-view.loading(@click='router.back()') loading
+PageContainer
+    image(:src='assets.images.mine_bg' mode='widthFix')
 </template>
 
 <script setup lang="ts">
+import { assets } from 'virtual:assets'
 const router = useRouter()
 </script>
 
-<style>
-.content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.logo {
-    height: 200rpx;
-    width: 200rpx;
-    margin-top: 200rpx;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 50rpx;
-}
-
-.text-area {
-    display: flex;
-    justify-content: center;
-}
-
-.title {
-    font-size: 36rpx;
-    color: #8f8f94;
+<style lang="scss" scoped>
+image {
+    width: 100rpx;
 }
 </style>

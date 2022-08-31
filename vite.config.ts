@@ -17,6 +17,7 @@ import {
 } from 'unplugin-unocss-attributify-wechat/vite'
 import extractorPug from '@unocss/extractor-pug'
 import { extractorSplit } from '@unocss/core'
+import assets from './scripts/vite-plugins/assets'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -64,6 +65,12 @@ export default defineConfig({
             dts: 'typings/auto-imports.d.ts',
             include: [/\.tsx?$/, /\.vue\??/],
             imports: autoImportLibs
+        }),
+        assets({
+            dts: 'typings/assets.d.ts',
+            dirs: {
+                images: 'images'
+            }
         })
     ]
 })

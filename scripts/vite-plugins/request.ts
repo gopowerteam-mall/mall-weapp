@@ -77,7 +77,7 @@ function generateServicePaths(option: Option) {
 
     const { replacement } = viteConfig.resolve.alias.find(
         alias => alias.find === option.alias
-    )
+    ) as any
 
     if (fs.existsSync(path.resolve(option.dir))) {
         walk(path.resolve(option.dir))
