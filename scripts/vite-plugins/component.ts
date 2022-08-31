@@ -47,7 +47,11 @@ declare module 'vue' {
     }
 }
 `
-    fs.writeFileSync(path.resolve(dts), declaration, 'utf-8')
+    fs.writeFileSync(
+        path.resolve(dts),
+        declaration.replace(/\r\n/g, '\n'),
+        'utf-8'
+    )
 }
 
 function generateImport(components) {

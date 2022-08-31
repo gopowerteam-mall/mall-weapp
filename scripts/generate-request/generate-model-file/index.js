@@ -18,13 +18,11 @@ module.exports.generateModelFiles = async (service, components) => {
         .map(({ className, properties }) =>
             generateModelContent(className, properties)
         )
-        .join('\r\n')
+        .join('\n')
 
     const modelImportContent = getImportContent()
 
-    const modelFileContent = [modelImportContent, modelClassContent].join(
-        '\r\n'
-    )
+    const modelFileContent = [modelImportContent, modelClassContent].join('\n')
 
     await writeModelFile(service, modelFileContent)
 }
@@ -120,5 +118,5 @@ async function writeModelFile(service, content) {
     const path = resolve(modelDirectionPath, name)
 
     await mkdirp.sync(dirname(path))
-    await writeFileSync(path, content, ENCODING)
+    await writeFileSync(path, content.replace(/\r\n/g, '\n'), ENCODING)
 }

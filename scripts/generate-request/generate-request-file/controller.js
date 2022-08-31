@@ -52,6 +52,6 @@ async function writeControllerFile(
         `${filename}.controller.ts`
     )
     await mkdirp.sync(dirname(path))
-    await writeFileSync(path, content, ENCODING)
+    await writeFileSync(path, content.replace(/\r\n/g, '\n'), ENCODING)
     return path
 }

@@ -217,7 +217,7 @@ function generateDeclaration(services: service[], serviceDeclaration: string) {
 
     fs.writeFileSync(
         path.resolve(viteConfig.root, serviceDeclaration ?? DECLARATION_FILE),
-        declaration,
+        declaration.replace(/\r\n/g, '\n'),
         'utf-8'
     )
 }

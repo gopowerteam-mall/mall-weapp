@@ -30,5 +30,9 @@ function generatePagesDeclaration(pages, dts) {
     const declaration = `declare type RouterPages =
     ${pages.map(x => `| \'/${x.path}\'\n`).join('    ')}`
 
-    fs.writeFileSync(path.resolve(dts), declaration, 'utf-8')
+    fs.writeFileSync(
+        path.resolve(dts),
+        declaration.replace(/\r\n/g, '\n'),
+        'utf-8'
+    )
 }
