@@ -8,8 +8,7 @@ export const appConfig = {
     weapp: {
         appid: import.meta.env.VITE_APP_WEAPP_APPID as string
     },
-    storage: {
-        public: 'cos',
-        private: 'cos'
-    } as const
+    qiniu: {
+        uploadURL: import.meta.env.VITE_QINIU_UPLOADURL
+    }
 } as const

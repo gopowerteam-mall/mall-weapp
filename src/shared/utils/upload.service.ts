@@ -1,8 +1,8 @@
 import { nanoid } from 'nanoid/non-secure'
+import { QiniuService } from '@/http/services/qiniu.service'
 import { appConfig } from '@/config/app.config'
-import { useRequest } from 'virtual:http-request'
-import { RequestParams } from '@/http/core'
-import { lastValueFrom } from 'rxjs'
+
+const qiniuService = new QiniuService()
 
 export type ChooseFilesResult =
     | UniApp.ChooseImageSuccessCallbackResultFile
@@ -91,22 +91,17 @@ export class UploadTask {
  * 公共函数
  */
 export class QiniuStorageService implements IStorageService {
-    // private store = useStore(store => store.app)
-
-    private readonly name: string
     private token: string
 
-    // TODO: 修正域名操作
-    private readonly domain: string
-    private readonly uploadUrl: string
-
-    constructor(name) {
-        this.name = name
+    constructor() {
         this.requestToken()
     }
 
     private requestToken() {
-        // TODO: 获取七牛上传Token
+        // 获取存储服务Token
+        qiniuService.getUploadToken().subscribe(({ token }) => {
+            this.token = token
+        })
     }
 
     /**
@@ -117,7 +112,8 @@ export class QiniuStorageService implements IStorageService {
         const logger = useLogger()
 
         uni.uploadFile({
-            url: this.uploadUrl,
+            url: appConfig.qiniu.uploadURL,
+            // 上传
             name: 'file',
             // #ifdef H5
             file: uploadTask.file as File,
@@ -134,7 +130,7 @@ export class QiniuStorageService implements IStorageService {
                 const error = result?.error
 
                 if (!error) {
-                    uploadTask.done(`${this.domain}/${uploadTask.key}`, result)
+                    uploadTask.done(uploadTask.key)
                 } else {
                     logger.error('上传失败', error)
                     uploadTask.abort()
@@ -148,87 +144,18 @@ export class QiniuStorageService implements IStorageService {
 }
 
 /**
- * 公共函数
- */
-export class CosStorageService implements IStorageService {
-    private readonly name: string
-
-    // private storageService = useRequest(
-    //     ({ FrontendService }) => FrontendService.StorageService
-    // )
-    constructor(name) {
-        this.name = name
-    }
-
-    /**
-     * 获取上传签名
-     * @param uploadTask
-     */
-    // private requestSignature(key: string) {
-    //     return lastValueFrom(
-    //         this.storageService.getStorageSignature(
-    //             new RequestParams({
-    //                 append: {
-    //                     storage: this.name,
-    //                     key
-    //                 }
-    //             })
-    //         )
-    //     )
-    // }
-
-    /**
-     * 文件上传
-     * @param fileObject
-     */
-    public async putObject(uploadTask: UploadTask) {
-        const logger = useLogger()
-        // TODO
-        // const { host, signature } = await this.requestSignature(uploadTask.key)
-
-        // uni.uploadFile({
-        //     url: host,
-        //     name: 'file',
-        //     // #ifdef H5
-        //     file: uploadTask.file as File,
-        //     // #endif
-        //     // #ifdef MP-WEIXIN || APP-PLUS
-        //     filePath: uploadTask.path,
-        //     // #endif
-        //     formData: {
-        //         ...signature,
-        //         success_action_status: 200
-        //     },
-        //     success: () => {
-        //         uploadTask.done(`${host}/${uploadTask.key}`)
-        //     },
-        //     fail: error => {
-        //         logger.error('上传失败', error)
-        //         uploadTask.abort()
-        //     }
-        // }).onProgressUpdate(res => uploadTask.updateProgress(res))
-    }
-}
-
-/**
  * 文件服务
  */
-export class UploaderService {
-    private readonly name: keyof typeof appConfig.storage
-
-    private static storages: {
-        [key: string]: IStorageService
-    } = {}
+export class UploadService {
+    private static storageService: IStorageService
 
     private getStorage() {
-        return UploaderService.storages[this.name]
+        return UploadService.storageService
     }
 
-    constructor(name: keyof typeof appConfig.storage) {
-        this.name = name
-
-        if (!UploaderService.storages[name]) {
-            this.createStroageService(name)
+    constructor() {
+        if (!UploadService.storageService) {
+            this.createStroageService()
         }
     }
 
@@ -271,23 +198,8 @@ export class UploaderService {
      * 创建注册存储服务
      * @param name
      */
-    private createStroageService(name: string) {
-        const getStorageInstance = () => {
-            switch (appConfig.storage[name]) {
-                case 'cos':
-                    return new CosStorageService(name)
-                // case 'qiniu':
-                //     return new QiniuStorageService(name)
-            }
-
-            // 使用七牛作为存储服务
-            // UploaderService.storages[name] = new QiniuStorageService(name)
-        }
-
-        const storageInstance = getStorageInstance()
-
-        if (storageInstance) {
-            UploaderService.storages[name] = storageInstance
-        }
+    private createStroageService() {
+        // 使用七牛作为存储服务
+        UploadService.storageService = new QiniuStorageService()
     }
 }

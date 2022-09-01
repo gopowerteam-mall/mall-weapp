@@ -1,6 +1,8 @@
 import { useLogin } from '@/shared/hooks'
 import { UpdateService } from '@/shared/utils/update.service'
 import { pages } from '@/pages.json'
+import { useRequest } from 'virtual:http-request'
+import { lastValueFrom } from 'rxjs'
 
 const logger = useLogger()
 
@@ -9,6 +11,19 @@ const logger = useLogger()
  */
 async function appUpdateCheck() {
     UpdateService.checkUpdate()
+}
+
+async function appBaseUpdate() {
+    const appStore = useStore(store => store.app)
+    const appService = useRequest(service => service.AppService)
+
+    return lastValueFrom(
+        appService.appBase({
+            basetime: appStore.basis.base_time
+        })
+    ).then(data => {
+        appStore.updateBasis(data)
+    })
 }
 
 /**
@@ -79,5 +94,10 @@ async function tabbarInterceptor() {
  * @returns
  */
 export default function appLaunch() {
-    return [appUpdateCheck(), appKeyboardListener(), tabbarInterceptor()]
+    return [
+        appUpdateCheck(),
+        appBaseUpdate(),
+        appKeyboardListener(),
+        tabbarInterceptor()
+    ]
 }

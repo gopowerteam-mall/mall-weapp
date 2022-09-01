@@ -28,7 +28,7 @@ import UploadProgress from './upload-progress.vue'
 
 const maxLength = 9
 const media = useMedia()
-const imageUploader = useUploader('image')
+const imageUploader = useUploader()
 
 const props = defineProps<{
     value: UploadTask[]

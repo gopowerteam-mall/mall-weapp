@@ -18,7 +18,7 @@ import HelloWorld from './components/hello-world.vue'
 const logger = useLogger()
 const router = useRouter()
 const media = useMedia()
-const uploader = useUploader('public')
+const uploader = useUploader()
 // const logger = useLogger()
 
 function onTestRouter() {
