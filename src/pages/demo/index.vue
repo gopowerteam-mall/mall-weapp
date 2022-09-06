@@ -5,20 +5,25 @@ PageContainer
             image(:src='assets.images.mine_bg' mode='widthFix')
         fui-card(title='图片上传')
             button(@click='onUpload') upload
+        fui-card(title='画廊')
+            MediaGallery(v-model='photos')
 </template>
 
 <script setup lang="ts">
+import { MediaType } from '@/config/enum.config'
 import { assets } from 'virtual:assets'
 
 const media = useMedia()
 const uploader = useUploader()
 const logger = useLogger()
 
+const photos = ref<string[]>([])
+
 /**
  * 上传文件
  */
 function onUpload() {
-    media.chooseMedia({ type: 'image' }).then(data => {
+    media.chooseMedia({ type: MediaType.image }).then(data => {
         const tasks = uploader.upload(data)
         tasks.forEach(x => {
             x.onComplete(a => logger.info(a))

@@ -1,9 +1,7 @@
 // TODO: 微信H5上传需要使用 WX JSSDK进行处理
 
+import { MediaSourceType, MediaType } from '@/config/enum.config'
 import type { ChooseFilesResult } from '../utils/upload.service'
-
-type MediaSourceType = 'album' | 'camera'
-type MediaType = 'image' | 'video'
 
 const ImageSourceMap: {
     label: string
@@ -11,11 +9,11 @@ const ImageSourceMap: {
 }[] = [
     {
         label: '相册',
-        value: 'album'
+        value: MediaSourceType.album
     },
     {
         label: '相机',
-        value: 'camera'
+        value: MediaSourceType.camera
     }
 ]
 
@@ -100,13 +98,17 @@ interface ChooseMediaOption {
 
 function chooseMedia({ type, source }: ChooseMediaOption) {
     switch (type) {
-        case 'image':
+        case MediaType.image:
             return chooseImage({
-                sourceType: source ? [source] : ['album', 'camera']
+                sourceType: source
+                    ? [source]
+                    : [MediaSourceType.album, MediaSourceType.camera]
             })
-        case 'video':
+        case MediaType.video:
             return chooseVideo({
-                sourceType: source ? [source] : ['album', 'camera']
+                sourceType: source
+                    ? [source]
+                    : [MediaSourceType.album, MediaSourceType.camera]
             })
     }
 }

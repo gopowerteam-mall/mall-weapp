@@ -1,5 +1,5 @@
 <template lang="pug">
-.page-dialog
+.page-dialog(@touchmove.stop.prevent)
     fui-modal(
         :buttons='dialogConfig?.buttons'
         :descr='dialogConfig?.message'

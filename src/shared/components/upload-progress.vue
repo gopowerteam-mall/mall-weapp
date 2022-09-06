@@ -1,21 +1,16 @@
 <template lang="pug">
 .upload-progress.h-full.w-full.relative
-    fui-animation(
-        :animationType='["fade"]'
-        :duration='100'
-        :show='!value.completed'
-        style='position: absolute; inset: 0'
-    )
-        .progress.flex.flex-center {{ value.progress }}%
+    .progress.flex.flex-center(v-if='value') {{ value?.progress }}%
 
     slot
 </template>
 
 <script setup lang="ts">
+import type { UnwrapRef } from 'vue'
 import { UploadTask } from '../utils/upload.service'
 
 defineProps<{
-    value: UploadTask
+    value?: UploadTask | UnwrapRef<UploadTask>
 }>()
 </script>
 

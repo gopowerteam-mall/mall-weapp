@@ -5,9 +5,12 @@ export enum DisplayScene {
     Avatar = 'AVATAR'
 }
 
-export enum FileType {
-    Image = 'IMAGE',
-    Video = 'VIDEO',
-    Document = 'DOCUMENT',
-    Other = 'OTHER'
+export enum MediaSourceType {
+    album = 'ALBUM',
+    camera = 'CAMERA'
+}
+
+export enum MediaType {
+    image = 'IMAGE',
+    video = 'VIDEO'
 }
