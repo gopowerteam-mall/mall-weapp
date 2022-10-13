@@ -96,6 +96,7 @@
     "@vueuse/shared": "^9.1.1",
     "autoprefixer": "10.4.8",
     "chalk": "4.1.2",
+    "commitizen": "4.2.5",
     "cz-customizable": "7.0.0",
     "eslint": "8.23.0",
     "eslint-config-prettier": "8.5.0",
