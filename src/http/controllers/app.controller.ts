@@ -10,36 +10,36 @@ const service = ''
 const gateway = 'default'
 
 export const AppController = {
-    // 获取系统基本信息
-    appBase: {
-        gateway,
-        service,
-        controller,
-        path: '/api/weapp/app/app-base',
-        type: RequestMethod.Get
-    },
-    // 用户登录
-    login: {
-        gateway,
-        service,
-        controller,
-        path: '/api/weapp/app/login',
-        type: RequestMethod.Get
-    },
-    // 刷新Token
-    token: {
-        gateway,
-        service,
-        controller,
-        path: '/api/weapp/app/token',
-        type: RequestMethod.Get
-    },
-    // 获取当前用户信息
-    getCurrentUser: {
-        gateway,
-        service,
-        controller,
-        path: '/api/weapp/app/current',
-        type: RequestMethod.Get
-    }
+  // 获取系统基本信息
+  appBase: {
+    gateway,
+    service,
+    controller,
+    path: '/api/weapp/app/app-base',
+    type: RequestMethod.Get,
+  },
+  // 用户登录
+  login: {
+    gateway,
+    service,
+    controller,
+    path: '/api/weapp/app/login',
+    type: RequestMethod.Get,
+  },
+  // 刷新Token
+  token: {
+    gateway,
+    service,
+    controller,
+    path: '/api/weapp/app/token',
+    type: RequestMethod.Get,
+  },
+  // 获取当前用户信息
+  getCurrentUser: {
+    gateway,
+    service,
+    controller,
+    path: '/api/weapp/app/current',
+    type: RequestMethod.Get,
+  },
 }

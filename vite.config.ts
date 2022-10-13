@@ -10,67 +10,68 @@ import autoImport from 'unplugin-auto-import/vite'
 import svg from './scripts/vite-plugins/svg-icon'
 import Unocss from 'unocss/vite'
 import transformWeClass from 'unplugin-transform-we-class/vite'
-import {
-    defaultAttributes,
-    defaultIgnoreNonValuedAttributes,
-    presetAttributifyWechat
-} from 'unplugin-unocss-attributify-wechat/vite'
+import { presetAttributifyWechat } from 'unplugin-unocss-attributify-wechat/vite'
 import extractorPug from '@unocss/extractor-pug'
 import { extractorSplit } from '@unocss/core'
 import assets from './scripts/vite-plugins/assets'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    resolve: {
-        alias: {
-            '@': `${resolve(__dirname, 'src')}`
-        }
+  resolve: {
+    alias: {
+      '@': `${resolve(__dirname, 'src')}`,
     },
-    plugins: [
-        uni(),
-        process.env.UNI_COMPILER !== 'nvue'
-            ? Unocss({
-                  extractors: [extractorPug(), extractorSplit]
-              })
-            : undefined,
-        // https://github.com/MellowCo/unplugin-unocss-attributify-wechat
-        presetAttributifyWechat({
-            // options
-        }),
-
-        // https://github.com/MellowCo/unplugin-transform-we-class
-        transformWeClass({
-            // options
-        }),
-        eslint({
-            fix: true,
-            include: ['src/**/*.{vue,ts,tsx}']
-        }),
-        svg({
-            dir: 'src/assets/icons',
-            dts: 'typings/icons.d.ts'
-        }),
-        router({
-            dts: 'typings/router.d.ts'
-        }),
-        component({
-            dts: 'typings/component.d.ts'
-        }),
-        request({
-            alias: '@',
-            dir: 'src/http/services',
-            dts: 'typings/request.d.ts'
-        }),
-        autoImport({
-            dts: 'typings/auto-imports.d.ts',
-            include: [/\.tsx?$/, /\.vue\??/],
-            imports: autoImportLibs
-        }),
-        assets({
-            dts: 'typings/assets.d.ts',
-            dirs: {
-                images: 'images'
-            }
+  },
+  plugins: [
+    uni({ vueOptions: { reactivityTransform: true } }),
+    process.env.UNI_COMPILER !== 'nvue'
+      ? Unocss({
+          extractors: [extractorPug(), extractorSplit],
         })
-    ]
+      : undefined,
+    // https://github.com/MellowCo/unplugin-unocss-attributify-wechat
+    presetAttributifyWechat({
+      // options
+    }),
+
+    // https://github.com/MellowCo/unplugin-transform-we-class
+    transformWeClass({
+      // options
+    }),
+    eslint({
+      fix: true,
+      include: ['src/**/*.{vue,ts,tsx}'],
+    }),
+    svg({
+      dir: 'src/assets/icons',
+      dts: 'typings/icons.d.ts',
+    }),
+    router({
+      dts: 'typings/router.d.ts',
+    }),
+    component({
+      dts: 'typings/component.d.ts',
+    }),
+    request({
+      alias: '@',
+      dir: 'src/http/services',
+      dts: 'typings/request.d.ts',
+    }),
+    autoImport({
+      dts: 'typings/auto-imports.d.ts',
+      include: [/\.tsx?$/, /\.vue\??/],
+      imports: autoImportLibs,
+      vueTemplate: true,
+      eslintrc: {
+        enabled: true,
+      },
+    }),
+
+    assets({
+      dts: 'typings/assets.d.ts',
+      dirs: {
+        images: 'images',
+      },
+    }),
+  ],
 })

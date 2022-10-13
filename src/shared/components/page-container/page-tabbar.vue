@@ -1,16 +1,16 @@
 <template lang="pug">
 .tabbar-container.fixed.flex
-    view.tab.flex-auto.flex.flex-center.flex-col(
-        :class='{ "mid-button": tab.midButton }'
-        :key='tab.pagePath'
-        @click='() => onSelectTab(tab)'
-        v-for='tab in tabbars'
+  view.tab.flex-auto.flex.flex-center.flex-col(
+    v-for='tab in tabbars'
+    :key='tab.pagePath'
+    :class='{ "mid-button": tab.midButton }'
+    @click='() => onSelectTab(tab)'
+  )
+    image.icon.py-1(
+      :src='currentPath === tab.pagePath ? tab.selectedIconPath : tab.iconPath'
+      mode='widthFix'
     )
-        image.icon.py-1(
-            :src='currentPath === tab.pagePath ? tab.selectedIconPath : tab.iconPath'
-            mode='widthFix'
-        )
-        .text(v-if='tab.text') {{ tab.text }}
+    .text(v-if='tab.text') {{ tab.text }}
 </template>
 
 <script setup lang="ts">
@@ -20,52 +20,52 @@ const router = useRouter()
 const currentPath = ref('')
 
 const tabbars: {
-    text: boolean
-    pagePath: string
-    iconPath: string
-    selectedIconPath: string
-    midButton: boolean
+  text: boolean
+  pagePath: string
+  iconPath: string
+  selectedIconPath: string
+  midButton: boolean
 }[] = []
 
 function onSelectTab(tab) {
-    if (tab.midButton) {
-        // TODO
-    } else {
-        uni.switchTab({ url: tab.pagePath })
-    }
+  if (tab.midButton) {
+    // TODO
+  } else {
+    uni.switchTab({ url: tab.pagePath })
+  }
 }
 
 onMounted(() => {
-    set(currentPath, router.getPath())
+  set(currentPath, router.getPath())
 })
 
 onHide(() => {
-    // TODO
+  // TODO
 })
 </script>
 
 <style lang="scss" scoped>
 .tabbar-container {
-    box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.1);
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: #fff;
+  box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.1);
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #fff;
 
-    .text {
-        font-size: 24rpx;
-    }
+  .text {
+    font-size: 24rpx;
+  }
 
+  .icon {
+    width: 50rpx;
+    height: 50rpx;
+  }
+
+  .mid-button {
     .icon {
-        width: 50rpx;
-        height: 50rpx;
+      width: 70rpx;
+      height: 70rpx;
     }
-
-    .mid-button {
-        .icon {
-            width: 70rpx;
-            height: 70rpx;
-        }
-    }
+  }
 }
 </style>

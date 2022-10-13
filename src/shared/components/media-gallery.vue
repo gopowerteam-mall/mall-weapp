@@ -1,45 +1,44 @@
 <template lang="pug">
 .media-gallery
-    fui-grid(:columns='columns' @click='onPreview' square)
-        fui-grid-item(:highlight='false' :key='item' v-for='item in values')
-            MediaGalleryItem(:src='item' @delete='() => onDelete(item)')
-        fui-grid-item(:highlight='false' :key='item.key' v-for='item in tasks')
-            MediaGalleryItem(
-                :key='item.key'
-                :task='item'
-                @delete='() => onDelete(item.key)'
-            )
-        fui-grid-item(
-            :highlight='false'
-            v-if='allowUpload && modelValue.length < max'
-        )
-            .media-wrapper.h-full.flex-center(@click='onAddMedia')
-                fui-icon(:size='40' name='plus')
+  fui-grid(:columns='columns' square @click='onPreview')
+    fui-grid-item(v-for='item in values' :key='item' :highlight='false')
+      MediaGalleryItem(:src='item' @delete='() => onDelete(item)')
+    fui-grid-item(v-for='item in tasks' :key='item.key' :highlight='false')
+      MediaGalleryItem(
+        :key='item.key'
+        :task='item'
+        @delete='() => onDelete(item.key)'
+      )
+    fui-grid-item(
+      v-if='allowUpload && modelValue.length < max'
+      :highlight='false'
+    )
+      .media-wrapper.h-full.flex-center(@click='onAddMedia')
+        fui-icon(:size='40' name='plus')
 </template>
 
 <script setup lang="ts">
-import { appConfig } from '@/config/app.config'
 import { MediaType } from '@/config/enum.config'
 import { useVModel } from '@vueuse/core'
 import type { Ref } from 'vue'
 import { UploadTask } from '../utils/upload.service'
 import MediaGalleryItem from './media-gallery-item.vue'
 const props = withDefaults(
-    defineProps<{
-        allowUpload?: boolean
-        multiple?: boolean
-        max?: number
-        type?: MediaType
-        columns?: number
-        modelValue: string[]
-    }>(),
-    {
-        max: 9,
-        columns: 3,
-        multiple: false,
-        allowUpload: true,
-        type: MediaType.image
-    }
+  defineProps<{
+    allowUpload?: boolean
+    multiple?: boolean
+    max?: number
+    type?: MediaType
+    columns?: number
+    modelValue: string[]
+  }>(),
+  {
+    max: 9,
+    columns: 3,
+    multiple: false,
+    allowUpload: true,
+    type: MediaType.image,
+  },
 )
 
 const tasks = ref<UploadTask[]>([])
@@ -56,61 +55,58 @@ const uploader = useUploader()
  * 添加媒体
  */
 function onAddMedia() {
-    media
-        .chooseMedia({ type: props.type })
-        .then(files => {
-            const list = uploader.upload(files)
+  media
+    .chooseMedia({ type: props.type })
+    .then((files) => {
+      const list = uploader.upload(files)
 
-            // 更新任务列表
-            set(tasks, [...(get(tasks) || []), ...list])
+      // 更新任务列表
+      set(tasks, [...(get(tasks) || []), ...list])
 
-            return Promise.all(
-                list.map(
-                    task =>
-                        new Promise(resolve => {
-                            task.onComplete(() => resolve(task.key))
-                        })
-                )
-            )
-        })
+      return Promise.all(
+        list.map(
+          (task) =>
+            new Promise((resolve) => {
+              task.onComplete(() => resolve(task.key))
+            }),
+        ),
+      )
+    })
 
-        .then(values => {
-            emit(
-                'update:modelValue',
-                get([...(props.modelValue || []), ...values])
-            )
-        })
+    .then((values) => {
+      emit('update:modelValue', get([...(props.modelValue || []), ...values]))
+    })
 }
 
 function onPreview() {
-    //  图片预览
+  //  图片预览
 }
 
 function getTasksValue() {
-    return (get(tasks) || []).map(x => x.key)
+  return (get(tasks) || []).map((x) => x.key)
 }
 
 /**
  * 删除逻辑
  */
 function onDelete(value: string) {
-    const deleteIndex = (data: Ref<any[] | undefined>, list: string[]) => {
-        const index = list.findIndex(x => x === value)
+  const deleteIndex = (data: Ref<any[] | undefined>, list: string[]) => {
+    const index = list.findIndex((x) => x === value)
 
-        if (index >= 0) {
-            get(data)?.splice(index, 1)
-        }
+    if (index >= 0) {
+      get(data)?.splice(index, 1)
     }
+  }
 
-    // 删除任务数据
-    deleteIndex(
-        tasks,
-        (get(tasks) || [])?.map(x => x.key)
-    )
+  // 删除任务数据
+  deleteIndex(
+    tasks,
+    (get(tasks) || [])?.map((x) => x.key),
+  )
 
-    // 删除历史数据
-    deleteIndex(values, get(values) || [])
+  // 删除历史数据
+  deleteIndex(values, get(values) || [])
 
-    emit('update:modelValue', [...get(values), ...getTasksValue()])
+  emit('update:modelValue', [...get(values), ...getTasksValue()])
 }
 </script>

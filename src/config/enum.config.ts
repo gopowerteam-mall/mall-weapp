@@ -1,16 +1,16 @@
 export enum DisplayScene {
-    List = 'LIST',
-    Cover = 'COVER',
-    Normal = 'NORMAL',
-    Avatar = 'AVATAR'
+  List = 'LIST',
+  Cover = 'COVER',
+  Normal = 'NORMAL',
+  Avatar = 'AVATAR',
 }
 
 export enum MediaSourceType {
-    album = 'ALBUM',
-    camera = 'CAMERA'
+  album = 'ALBUM',
+  camera = 'CAMERA',
 }
 
 export enum MediaType {
-    image = 'IMAGE',
-    video = 'VIDEO'
+  image = 'IMAGE',
+  video = 'VIDEO',
 }

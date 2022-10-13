@@ -6,7 +6,8 @@
             "^PageContainer": "@/shared/components/page-container/page-container.vue",
             "^MediaGallery": "@/shared/components/media-gallery.vue",
             "^UploadProgress": "@/shared/components/upload-progress.vue",
-            "^SvgIcon": "@/shared/components/svg-icon.vue"
+            "^SvgIcon": "@/shared/components/svg-icon.vue",
+            "^ImagePreview": "@/shared/components/image-preview.vue"
         }
     },
     "pages": [
@@ -34,7 +35,7 @@
                 "navigationBarTitleText": "购物车"
             },
             "meta": {
-                "needLogin": false
+                "needLogin": true
             }
         },
         {
@@ -43,7 +44,7 @@
                 "navigationBarTitleText": "我的"
             },
             "meta": {
-                "needLogin": false
+                "needLogin": true
             }
         },
         {
@@ -52,7 +53,7 @@
                 "navigationBarTitleText": "示例"
             },
             "meta": {
-                "needLogin": false
+                "needLogin": true
             }
         }
     ],

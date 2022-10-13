@@ -7,10 +7,10 @@ import { useStorage } from '.'
  * State数据结构
  */
 interface State {
-    accessToken: Ref<string>
-    refreshToken: Ref<string>
-    // 用户信息
-    current?: User
+  accessToken: Ref<string>
+  refreshToken: Ref<string>
+  // 用户信息
+  current?: User
 }
 
 /**
@@ -18,27 +18,27 @@ interface State {
  * @returns
  */
 const createState = (): State => ({
-    accessToken: useStorage('user.access-token', ''),
-    refreshToken: useStorage('user.refresh-token', ''),
-    // 用户信息
-    current: undefined
+  accessToken: useStorage('user.access-token', ''),
+  refreshToken: useStorage('user.refresh-token', ''),
+  // 用户信息
+  current: undefined,
 })
 
 export const store = defineStore('user', {
-    state: createState,
-    actions: {
-        updateToken({
-            accessToken,
-            refreshToken
-        }: {
-            accessToken: string
-            refreshToken: string
-        }) {
-            this.accessToken = accessToken
-            this.refreshToken = refreshToken
-        },
-        updateCurrent(user: User) {
-            this.current = user
-        }
-    }
+  state: createState,
+  actions: {
+    updateToken({
+      accessToken,
+      refreshToken,
+    }: {
+      accessToken: string
+      refreshToken: string
+    }) {
+      this.accessToken = accessToken
+      this.refreshToken = refreshToken
+    },
+    updateCurrent(user: User) {
+      this.current = user
+    },
+  },
 })

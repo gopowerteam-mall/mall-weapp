@@ -4,89 +4,81 @@ import { pages } from '@/pages.json'
 import { useRequest } from 'virtual:http-request'
 import { lastValueFrom } from 'rxjs'
 
-const logger = useLogger()
-
 /**
  * 检测App更新
  */
 async function appUpdateCheck() {
-    UpdateService.checkUpdate()
+  UpdateService.checkUpdate()
 }
 
 async function appBaseUpdate() {
-    const appStore = useStore(store => store.app)
-    const appService = useRequest(service => service.AppService)
+  const appStore = useStore((store) => store.app)
+  const appService = useRequest((service) => service.AppService)
 
-    return lastValueFrom(
-        appService.appBase({
-            basetime: appStore.basis.base_time
-        })
-    ).then(data => {
-        appStore.updateBasis(data)
-    })
+  return lastValueFrom(
+    appService.appBase({
+      basetime: appStore.basis.base_time,
+    }),
+  ).then((data) => {
+    appStore.updateBasis(data)
+  })
 }
 
 /**
  * 获取键盘信息
  */
 async function appKeyboardListener() {
-    const HeaderHight = 100
-    const store = useStore(store => store.app)
+  const HeaderHight = 100
+  const store = useStore((store) => store.app)
 
-    // #ifndef H5
-    uni.onKeyboardHeightChange(({ height }) => {
-        store.updateKeyboard({
-            visiable: height !== 0,
-            height
-        })
+  // #ifndef H5
+  uni.onKeyboardHeightChange(({ height }) => {
+    store.updateKeyboard({
+      visiable: height !== 0,
+      height,
     })
-    // #endif
+  })
+  // #endif
 
-    // #ifdef H5
-    uni.onWindowResize(({ size }) => {
-        const { windowHeight, screenHeight } = size as any
-        const visiable = screenHeight - windowHeight > HeaderHight
-        store.updateKeyboard({
-            visiable,
-            height: 0
-        })
+  // #ifdef H5
+  uni.onWindowResize(({ size }) => {
+    const { windowHeight, screenHeight } = size as any
+    const visiable = screenHeight - windowHeight > HeaderHight
+    store.updateKeyboard({
+      visiable,
+      height: 0,
     })
-    // #endif
+  })
+  // #endif
 }
 
 /**
  * Tabbar跳转权限拦截
  */
 async function tabbarInterceptor() {
-    const onNeedLogin = (url: string) => {
-        const login = useLogin()
+  const onNeedLogin = (url: string) => {
+    const login = useLogin()
 
-        login.show().then(() => {
-            uni.switchTab({ url })
-        })
-    }
-
-    uni.addInterceptor('switchTab', {
-        invoke: ({ url }) => {
-            const store = useStore(store => store.user)
-
-            const page = pages.find(
-                page => page.path === url.replace(/^\//, '')
-            )
-
-            // switchTab页面授权判断
-            if (
-                url !== '/' &&
-                page?.meta?.needLogin === true &&
-                !store.current
-            ) {
-                onNeedLogin(url)
-                return false
-            } else {
-                return true
-            }
-        }
+    login.show().then(() => {
+      uni.switchTab({ url })
     })
+  }
+
+  uni.addInterceptor('switchTab', {
+    invoke: ({ url }) => {
+      const store = useStore((store) => store.user)
+
+      const page = pages.find((page) => page.path === url.replace(/^\//, ''))
+
+      // switchTab页面授权判断
+      if (url !== '/' && page?.meta?.needLogin === true && !store.current) {
+        onNeedLogin(url)
+        return false
+      } else {
+        return true
+      }
+    },
+  })
 }
 
 /**
@@ -94,10 +86,10 @@ async function tabbarInterceptor() {
  * @returns
  */
 export default function appLaunch() {
-    return [
-        appUpdateCheck(),
-        appBaseUpdate(),
-        appKeyboardListener(),
-        tabbarInterceptor()
-    ]
+  return [
+    appUpdateCheck(),
+    appBaseUpdate(),
+    appKeyboardListener(),
+    tabbarInterceptor(),
+  ]
 }

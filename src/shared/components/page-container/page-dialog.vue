@@ -1,13 +1,13 @@
 <template lang="pug">
 .page-dialog(@touchmove.stop.prevent)
-    fui-modal(
-        :buttons='dialogConfig?.buttons'
-        :descr='dialogConfig?.message'
-        :show='dialogVisiable'
-        :title='dialogConfig?.title'
-        @click='onSelect'
-        ref='dialog'
-    )
+fui-modal(
+  ref='dialog'
+  :buttons='dialogConfig?.buttons'
+  :descr='dialogConfig?.message'
+  :show='dialogVisiable'
+  :title='dialogConfig?.title'
+  @click='onSelect'
+)
 </template>
 
 <script setup lang="ts">
@@ -19,34 +19,34 @@ const dialogVisiable = ref(false)
 const dialogConfig = ref<DialogConfig>()
 
 const defaultConfig = {
-    title: '提示',
-    buttons: [
-        {
-            key: 'cancel',
-            text: '取消'
-        },
-        {
-            key: 'ok',
-            text: '确定'
-        }
-    ]
+  title: '提示',
+  buttons: [
+    {
+      key: 'cancel',
+      text: '取消',
+    },
+    {
+      key: 'ok',
+      text: '确定',
+    },
+  ],
 }
 
 const showEvent = ref('')
 const selectEvent = ref('')
 
 function onSelect(button) {
-    set(dialogVisiable, false)
-    uni.$emit(get(selectEvent), button)
+  set(dialogVisiable, false)
+  uni.$emit(get(selectEvent), button)
 }
 
 onMounted(() => {
-    set(showEvent, `${router.getPath()}:${events.dialog.show}`)
-    set(selectEvent, `${router.getPath()}:${events.dialog.select}`)
+  set(showEvent, `${router.getPath()}:${events.dialog.show}`)
+  set(selectEvent, `${router.getPath()}:${events.dialog.select}`)
 
-    uni.$on(get(showEvent), (config: DialogConfig) => {
-        set(dialogConfig, Object.assign({}, defaultConfig, config))
-        set(dialogVisiable, true)
-    })
+  uni.$on(get(showEvent), (config: DialogConfig) => {
+    set(dialogConfig, Object.assign({}, defaultConfig, config))
+    set(dialogVisiable, true)
+  })
 })
 </script>

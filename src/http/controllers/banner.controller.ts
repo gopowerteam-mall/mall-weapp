@@ -5,17 +5,17 @@
 import { RequestMethod } from '@/http/core'
 
 // 控制器名称
-const controller = 'qiniu'
+const controller = 'banner'
 const service = ''
 const gateway = 'default'
 
-export const QiniuController = {
-  //
-  getUploadToken: {
+export const BannerController = {
+  // 查询Banner列表
+  findBanner: {
     gateway,
     service,
     controller,
-    path: '/api/qiniu/upload-token',
+    path: '/api/weapp/banner',
     type: RequestMethod.Get,
   },
 }

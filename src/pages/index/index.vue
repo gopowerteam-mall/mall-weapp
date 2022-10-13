@@ -1,39 +1,16 @@
 <template lang="pug">
 PageContainer
-    HelloWorld
-    view.text.font-bold.text-center.m-10(@click='onTestRouter') There is Page Content
-    SvgIcon(
-        :textGap='2'
-        name='weibo'
-        size='80'
-        text='123123123123'
-        text-position='bottom'
-        textColor='red'
-    )
+  Banner
+  Category
+  Recommand
 </template>
 
 <script setup lang="ts">
-import HelloWorld from './components/hello-world.vue'
+import Banner from './components/banner.vue'
+import Category from './components/category.vue'
+import Recommand from './components/recommand.vue'
 
-const logger = useLogger()
-const router = useRouter()
-const media = useMedia()
-const uploader = useUploader()
-// const logger = useLogger()
-
-function onTestRouter() {
-    // router.navigateTo('/pages/test-01/index')
-    // media.chooseMedia({ type: 'image' }).then(data => {
-    //     const tasks = uploader.upload(data)
-    //     tasks.forEach(x => {
-    //         x.onComplete(a => console.log(x.url))
-    //     })
-    // })
-}
-
-onPageLoad(() => {
-    logger.info('页面启动')
-})
+onPageLoad(() => {})
 </script>
 
 <style lang="scss" scoped></style>

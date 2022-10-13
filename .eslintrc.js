@@ -1,22 +1,65 @@
 module.exports = {
-    root: true,
-    env: {
-        browser: true,
-        node: true
+  env: {
+    node: true,
+    browser: true,
+  },
+  globals: {
+    uni: 'readonly',
+    plus: 'readonly',
+    wx: 'readonly',
+  },
+  extends: [
+    // 基础规则引入
+    'eslint:recommended',
+    // React规则引入
+    // 'plugin:react/recommended',
+    // prettier规则引入&处理perttier-eslint冲突
+    'plugin:prettier/recommended',
+    './.eslintrc-auto-import.json',
+  ],
+  overrides: [
+    {
+      files: ['**/*.{js,jsx}'],
+      parser: '@babel/eslint-parser',
+      parserOptions: {
+        sourceType: 'module',
+        allowImportExportEverywhere: false,
+        ecmaFeatures: {
+          globalReturn: false,
+        },
+      },
     },
-    globals: {
-        uni: 'readonly',
-        plus: 'readonly',
-        wx: 'readonly'
+    {
+      files: ['**/*.{ts,tsx}'],
+      extends: [
+        // typescript支持引入
+        'plugin:@typescript-eslint/recommended',
+      ],
+      rules: {
+        '@typescript-eslint/no-explicit-any': ['off'],
+        '@typescript-eslint/no-unused-vars': ['off'],
+      },
     },
-    extends: ['plugin:vue/essential', '@vue/prettier', '@vue/typescript'],
-    parserOptions: {
-        parser: '@typescript-eslint/parser'
+    {
+      files: ['**/*.vue'], // 只处理 vue 文件
+      extends: [
+        // vue3支持引入
+        // 'plugin:vue/vue3-essential',
+        'plugin:vue/vue3-strongly-recommended',
+        'plugin:vue/vue3-recommended',
+        'plugin:vue-pug/vue3-recommended',
+        'plugin:prettier-vue/recommended',
+        // typescript支持引入
+        '@vue/typescript',
+      ],
+      rules: {
+        'vue/multi-word-component-names': ['off'],
+        // 'vue/max-attributes-per-line': ['off'],
+        // 'vue/html-indent': ['off']
+        // 'vue/attributes-order': ['off'],
+        'no-console': ['warn'],
+        '@typescript-eslint/no-explicit-any': ['off'],
+      },
     },
-    rules: {
-        quotes: [1, 'single'],
-        'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
-        'no-console': 1,
-        'vue/multi-word-component-names': 0
-    }
+  ],
 }

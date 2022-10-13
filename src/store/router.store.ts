@@ -6,7 +6,7 @@ import { useStorage } from '.'
  * State数据结构
  */
 interface State {
-    text?: Ref<Text>
+  text?: Ref<Text>
 }
 
 /**
@@ -14,17 +14,19 @@ interface State {
  * @returns
  */
 const createState = (): State => ({
-    text: useStorage('edit.text', { placeholder: '', content: '' })
+  text: useStorage('edit.text', { placeholder: '', content: '' }),
 })
 
 export const store = defineStore('user', {
-    state: createState,
-    actions: {
-        updateText(value: string) {}
-    }
+  state: createState,
+  actions: {
+    updateText(value: string) {
+      //
+    },
+  },
 })
 
 interface Text {
-    placeholder: string
-    content: string
+  placeholder: string
+  content: string
 }

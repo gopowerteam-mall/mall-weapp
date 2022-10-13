@@ -6,7 +6,7 @@ PageContainer(tabbar)
 const logger = useLogger()
 
 onPageLoad(() => {
-    logger.info('页面启动')
+  logger.info('页面启动')
 })
 </script>
 

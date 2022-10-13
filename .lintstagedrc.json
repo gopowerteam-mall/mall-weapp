@@ -1,9 +1,8 @@
 {
-    "*.tsx!*.d.ts": ["eslint  --fix", "prettier --write", "git add ."],
-    "!(src/uni-modules/**/*)*.js": "eslint --cache --fix",
-    "!(src/uni-modules/**/*)*.vue": [
-        "eslint  --fix",
-        "prettier --write",
-        "git add ."
-    ]
+  "*.tsx!*.d.ts": ["eslint --cache --fix --max-warnings=0", "git add ."],
+  "!(src/uni-modules/**/*)*.js": ["eslint --cache --fix  --max-warnings=0"],
+  "!(src/uni-modules/**/*)*.vue": [
+    "eslint  --fix  --max-warnings=0",
+    "git add ."
+  ]
 }

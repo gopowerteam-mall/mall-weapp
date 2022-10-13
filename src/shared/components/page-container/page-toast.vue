@@ -1,6 +1,6 @@
 <template lang="pug">
 .page-toast
-    fui-message(:background='background' ref='toast')
+  fui-message(ref='toast' :background='background')
 </template>
 
 <script setup lang="ts">
@@ -16,26 +16,26 @@ const background = computed(() => ToastTypeConfig[get(toastType)].background)
 
 // TODO：修改配色
 const ToastTypeConfig: Record<ToastType, { background: string }> = {
-    success: {
-        background: '#00d880'
-    },
-    info: {
-        background: '#00d880'
-    },
-    error: {
-        background: '#00d880'
-    },
-    warn: {
-        background: '#00d880'
-    }
+  success: {
+    background: '#00d880',
+  },
+  info: {
+    background: '#00d880',
+  },
+  error: {
+    background: '#00d880',
+  },
+  warn: {
+    background: '#00d880',
+  },
 }
 
 uni.$on(events.toast.show, (config: ToastConfig) => {
-    set(toastType, config.type)
+  set(toastType, config.type)
 
-    get(toastRef)?.show({
-        text: config.text,
-        duration: config.duration
-    })
+  get(toastRef)?.show({
+    text: config.text,
+    duration: config.duration,
+  })
 })
 </script>

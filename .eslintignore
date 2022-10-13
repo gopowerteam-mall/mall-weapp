@@ -4,3 +4,7 @@ src/uni-modules/**/*
 logger.service.ts
 
 scripts/**/*
+src/http/**
+
+logger.service.ts
+scripts/**/*

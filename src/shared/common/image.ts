@@ -6,8 +6,8 @@ import { DisplayScene } from '@/config/enum.config'
  * @returns
  */
 export function generateImageSuffix(scene: DisplayScene) {
-    // TODO: 获取图片样式
-    return scene === DisplayScene.Normal ? '' : ''
+  // TODO: 获取图片样式
+  return scene === DisplayScene.Normal ? '' : ''
 }
 
 /**
@@ -16,13 +16,13 @@ export function generateImageSuffix(scene: DisplayScene) {
  * @param scene
  */
 export function generateImageURL(
-    key: string,
-    scene: DisplayScene = DisplayScene.Normal
+  key: string,
+  scene: DisplayScene = DisplayScene.Normal,
 ) {
-    const appStore = useStore(store => store.app)
+  const appStore = useStore((store) => store.app)
 
-    // 获取样式后缀
-    const suffix = generateImageSuffix(scene)
+  // 获取样式后缀
+  const suffix = generateImageSuffix(scene)
 
-    return `https://${appStore.basis.qiniu.domain}/${key}${suffix}`
+  return `https://${appStore.basis.qiniu.domain}/${key}${suffix}`
 }

@@ -5,16 +5,16 @@ import { useLogger } from './shared/hooks'
 const logger = useLogger()
 
 export default {
-    onLaunch: () => {
-        // 系统初始化
-        bootstrap()
-    },
-    onShow: () => {
-        logger.info('App Show')
-    },
-    onHide: () => {
-        logger.info('App Hide')
-    }
+  onLaunch: () => {
+    // 系统初始化
+    bootstrap()
+  },
+  onShow: () => {
+    logger.info('App Show')
+  },
+  onHide: () => {
+    logger.info('App Hide')
+  },
 }
 </script>
 

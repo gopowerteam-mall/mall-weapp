@@ -4,19 +4,19 @@
  */
 import { RequestAction, RequestParams } from '@/http/core'
 import type { Observable } from 'rxjs'
-import { QiniuController } from '@/http/controllers/qiniu.controller'
-import { GetUploadTokenResponse } from '@/http/model'
+import { BannerController } from '@/http/controllers/banner.controller'
+import { Banner } from '@/http/model'
 
-export class QiniuService {
+export class BannerService {
   /**
-   *
+   * 查询Banner列表
    */
   @RequestAction({
-    server: QiniuController.getUploadToken,
+    server: BannerController.findBanner,
   })
-  public getUploadToken(
+  public findBanner(
     params?: RequestParams | { [key: string]: any },
-  ): Observable<GetUploadTokenResponse> {
+  ): Observable<Banner[]> {
     return RequestParams.create(params).request()
   }
 }
