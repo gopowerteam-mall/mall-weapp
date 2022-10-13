@@ -68,7 +68,7 @@ async function userLaunch() {
   await updateUserInfo()
   // 同步并获取应用
   if (store.current) {
-    await Promise.all(getUserLaunchTasks())
+    return Promise.all(getUserLaunchTasks())
   }
 }
 

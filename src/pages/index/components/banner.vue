@@ -31,7 +31,8 @@ function requestBanner() {
     banners = data
   })
 }
-onMounted(() => {
+
+onPageLoad(() => {
   requestBanner()
 })
 </script>
