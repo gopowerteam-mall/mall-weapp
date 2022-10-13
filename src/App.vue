@@ -6,7 +6,6 @@ const logger = useLogger()
 
 export default {
   onLaunch: () => {
-    // 系统初始化
     bootstrap()
   },
   onShow: () => {
