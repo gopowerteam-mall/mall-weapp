@@ -1,7 +1,6 @@
 <template lang="pug">
 .upload-progress.h-full.w-full.relative
   .progress.flex.flex-center(v-if='value') {{ value?.progress }}%
-
   slot
 </template>
 

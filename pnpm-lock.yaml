@@ -39,7 +39,7 @@ specifiers:
   autoprefixer: 10.4.8
   chalk: 4.1.2
   class-transformer: 0.5.1
-  cz-customizable: 6.9.2
+  cz-customizable: 7.0.0
   dayjs: 1.11.5
   eslint: 8.23.0
   eslint-config-prettier: 8.5.0
@@ -123,7 +123,7 @@ devDependencies:
   '@vueuse/shared': registry.npmmirror.com/@vueuse/shared/9.1.1_vue@3.2.37
   autoprefixer: registry.npmmirror.com/autoprefixer/10.4.8_postcss@8.4.16
   chalk: registry.npmmirror.com/chalk/4.1.2
-  cz-customizable: registry.npmmirror.com/cz-customizable/6.9.2
+  cz-customizable: registry.npmmirror.com/cz-customizable/7.0.0
   eslint: registry.npmmirror.com/eslint/8.23.0
   eslint-config-prettier: registry.npmmirror.com/eslint-config-prettier/8.5.0_eslint@8.23.0
   eslint-plugin-prettier: registry.npmmirror.com/eslint-plugin-prettier/4.2.1_tgumt6uwl2md3n6uqnggd6wvce
@@ -5163,10 +5163,10 @@ packages:
     name: csstype
     version: 2.6.20
 
-  registry.npmmirror.com/cz-customizable/6.9.2:
-    resolution: {integrity: sha512-33Y0eHAp40sb7K346Shm07X+ZIckPKV8pBHUH5Lh2tI4fi0mjHkrYDrwQyJMS8095Ri+H+xkxOmblzQ64wT/Fg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/cz-customizable/-/cz-customizable-6.9.2.tgz}
+  registry.npmmirror.com/cz-customizable/7.0.0:
+    resolution: {integrity: sha512-pQKkGSm+8SY9VY/yeJqDOla1MjrGaG7WG4EYLLEV4VNctGO7WdzdGtWEr2ydKSkrpmTs7f8fmBksg/FaTrUAyw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/cz-customizable/-/cz-customizable-7.0.0.tgz}
     name: cz-customizable
-    version: 6.9.2
+    version: 7.0.0
     hasBin: true
     dependencies:
       editor: registry.npmmirror.com/editor/1.0.0

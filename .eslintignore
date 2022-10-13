@@ -8,3 +8,7 @@ src/http/**
 
 logger.service.ts
 scripts/**/*
+
+!.lintstagedrc.js
+!.eslintrc.js
+!.cz-config.js
