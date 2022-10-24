@@ -1,11 +1,13 @@
-import { ExtendService, RequestParams } from '@/http/core'
+import {
+  AdapterResponse,
+  RequestPlugin,
+  RequestSendOptions,
+} from '@gopowerteam/request'
 
-export class SortService extends ExtendService {
+export class SortService implements RequestPlugin {
   private sort: { [key: string]: 'asc' | 'desc' } = {}
 
   constructor(data?: any) {
-    super()
-
     if (data) this.sort = data
   }
 
@@ -40,14 +42,11 @@ export class SortService extends ExtendService {
     }
   }
 
-  public before = (params: RequestParams) => {
-    params.setOptions({
-      ...(params.getOptions() || {}),
-      urlParams: {
-        ...params.getOptions('urlParams'),
-        sort: this.stringify(this.sort),
-      },
-    })
+  public before = (options: RequestSendOptions) => {
+    options.paramsQuery = {
+      ...(options.paramsQuery || {}),
+      sort: this.stringify(this.sort),
+    }
   }
 
   /**

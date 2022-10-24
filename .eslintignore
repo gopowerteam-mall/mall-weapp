@@ -12,3 +12,4 @@ scripts/**/*
 !.lintstagedrc.js
 !.eslintrc.js
 !.cz-config.js
+!.prettierrc.js

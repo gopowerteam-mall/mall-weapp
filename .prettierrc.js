@@ -45,10 +45,8 @@ module.exports = {
   singleAttributePerLine: true,
   pugAttributeSeparator: 'none',
   pugEmptyAttributes: 'none',
-  pugBracketSameLine: false,
   pugSortAttributes: 'as-is',
   pugClassNotation: 'literal',
-  pugSingleQuote: true,
   pugFramework: 'vue',
   // pugSortAttributesBeginning: [
   //   // DEFINITION

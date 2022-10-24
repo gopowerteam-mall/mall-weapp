@@ -16,10 +16,10 @@ fui-swiper-dot(:items='banners')
 </template>
 
 <script setup lang="ts">
-import { Banner } from '@/http/model'
+import { Banner } from '@/http/models/Banner'
 import { useRequest } from 'virtual:http-request'
 
-const bannerService = useRequest((service) => service.BannerService)
+const bannerService = useRequest((service) => service.HomeService)
 
 let banners = $ref<Banner[]>([])
 
@@ -27,7 +27,7 @@ let banners = $ref<Banner[]>([])
  * 请求Banner
  */
 function requestBanner() {
-  bannerService.findBanner().subscribe((data) => {
+  bannerService.getBannerList().then((data) => {
     banners = data
   })
 }

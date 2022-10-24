@@ -2,7 +2,6 @@ import { useLogin } from '@/shared/hooks'
 import { UpdateService } from '@/shared/utils/update.service'
 import { pages } from '@/pages.json'
 import { useRequest } from 'virtual:http-request'
-import { lastValueFrom } from 'rxjs'
 
 /**
  * 检测App更新
@@ -15,11 +14,7 @@ async function appBaseUpdate() {
   const appStore = useStore((store) => store.app)
   const appService = useRequest((service) => service.AppService)
 
-  return lastValueFrom(
-    appService.appBase({
-      basetime: appStore.basis.base_time,
-    }),
-  ).then((data) => {
+  return appService.appBase().then((data) => {
     appStore.updateBasis(data)
   })
 }

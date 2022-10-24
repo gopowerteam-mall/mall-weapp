@@ -13,44 +13,42 @@ let generatedServices: service[]
 let viteConfig: ResolvedConfig
 
 type service = {
-    name: string
-    group: string
-    path: string
+  name: string
+  group: string
+  path: string
 }
 
 type Option = {
-    alias: string
-    dir: string
-    dts: string
+  alias: string
+  dir: string
+  dts: string
 }
 
 export default (option: Option): Plugin => {
-    return {
-        name: 'vite-plugin-http-request',
-        enforce: 'pre',
-        resolveId(id: string) {
-            if (id === MODULE_ID) {
-                return MODULE_ID
-            }
-        },
-        configResolved(config) {
-            viteConfig = config
-        },
-        load(id: string) {
-            if (id !== MODULE_ID) return
+  return {
+    name: 'vite-plugin-http-request',
+    enforce: 'pre',
+    resolveId(id: string) {
+      if (id === MODULE_ID) {
+        return MODULE_ID
+      }
+    },
+    configResolved(config) {
+      viteConfig = config
+    },
+    load(id: string) {
+      if (id !== MODULE_ID) return
 
-            if (!generatedServices) {
-                generatedServices = generateServices(
-                    generateServicePaths(option)
-                )
-            }
+      if (!generatedServices) {
+        generatedServices = generateServices(generateServicePaths(option))
+      }
 
-            if (generatedServices) {
-                generateDeclaration(generatedServices, option.dts)
-                return generateCode(generatedServices)
-            }
-        }
-    }
+      if (generatedServices) {
+        generateDeclaration(generatedServices, option.dts)
+        return generateCode(generatedServices)
+      }
+    },
+  }
 }
 
 /**
@@ -59,33 +57,32 @@ export default (option: Option): Plugin => {
  * @returns
  */
 function generateServicePaths(option: Option) {
-    const servicePaths: string[] = []
-    const walk = (dir: string) => {
-        fs.readdirSync(dir).forEach(function (file) {
-            // 修正windows路径符号问题
-            const fullpath = path.join(dir, file).replace(/\\/g, '/')
-            const stat = fs.statSync(fullpath)
+  const servicePaths: string[] = []
+  const walk = (dir: string) => {
+    fs.readdirSync(dir).forEach(function (file) {
+      // 修正windows路径符号问题
+      const fullpath = path.join(dir, file).replace(/\\/g, '/')
+      const stat = fs.statSync(fullpath)
 
-            if (stat.isFile() && fullpath.endsWith('.service.ts')) {
-                servicePaths.push(fullpath)
-            } else if (stat.isDirectory()) {
-                const subdir = path.join(dir, file)
-                walk(subdir)
-            }
-        })
-    }
+      if (stat.isFile() && fullpath.endsWith('.ts')) {
+        servicePaths.push(fullpath)
+      } else if (stat.isDirectory()) {
+        const subdir = path.join(dir, file)
+        walk(subdir)
+      }
+    })
+  }
 
-    const { replacement } = viteConfig.resolve.alias.find(
-        alias => alias.find === option.alias
-    ) as any
+  const { replacement } = viteConfig.resolve.alias.find(
+    (alias) => alias.find === option.alias,
+  ) as any
 
-    if (fs.existsSync(path.resolve(option.dir))) {
-        walk(path.resolve(option.dir))
-    }
-
-    return servicePaths.map(servicePath =>
-        servicePath.replace(replacement.replace(/\\/g, '/'), option.alias)
-    )
+  if (fs.existsSync(path.resolve(option.dir))) {
+    walk(path.resolve(option.dir))
+  }
+  return servicePaths.map((servicePath) =>
+    servicePath.replace(replacement.replace(/\\/g, '/'), option.alias),
+  )
 }
 
 /**
@@ -94,35 +91,32 @@ function generateServicePaths(option: Option) {
  * @returns
  */
 function generateServices(paths: string[]) {
-    const toCaseString = (str = '') =>
-        str
-            .replace(/-(\w)/g, ($, $1: string) => $1.toUpperCase())
-            .replace(/^\S/, s => s.toUpperCase())
+  const toCaseString = (str = '') =>
+    str
+      .replace(/-(\w)/g, ($, $1: string) => $1.toUpperCase())
+      .replace(/^\S/, (s) => s.toUpperCase())
 
-    return paths.map(filePath => {
-        const [name] =
-            /[^\\]+(?=\.service\.ts$)/.exec(
-                toCaseString(path.basename(filePath))
-            ) || []
+  return paths.map((filePath) => {
+    const [name] =
+      /[^\\]+(?=\.ts$)/.exec(toCaseString(path.basename(filePath))) || []
 
-        const [group] =
-            /(?<=^.\/http\/services\/)(.*?)(?=\/.*?\.service\.ts$)/.exec(
-                filePath
-            ) || []
+    // TODO: 重新完成Group解析
+    // const [group] =
+    //   /(?<=^.\/http\/services\/)(.*?)(?=\/.*?\.ts$)/.exec(filePath) || []
 
-        return {
-            name: `${toCaseString(name)}Service`,
-            group: toCaseString(group),
-            path: filePath
-        }
-    })
+    return {
+      name: `${toCaseString(name)}`,
+      group: ``,
+      path: filePath,
+    }
+  })
 }
 
 function generateCode(services: service[]) {
-    const importCode = generateImportCode(services)
-    const serviceCode = generateServiceCode(services)
+  const importCode = generateImportCode(services)
+  const serviceCode = generateServiceCode(services)
 
-    return `
+  return `
 ${importCode}
 ${serviceCode}
 
@@ -142,19 +136,20 @@ export function useRequest(
  * @returns
  */
 function generateImportCode(services: service[], placeholder = '') {
-    const getImportName = (service: service) =>
-        service.group
-            ? `${service.name} as ${service.group}_${service.name}`
-            : service.name
+  const getImportName = (service: service) =>
+    service.group
+      ? `${service.name} as ${service.group}_${service.name}`
+      : service.name
 
-    return services
-        .map(
-            service =>
-                `import { ${getImportName(
-                    service
-                )} } from '${service.path.replace(/\.ts$/g, '')}'`
-        )
-        .join(`\r\n${placeholder}`)
+  return services
+    .map(
+      (service) =>
+        `import { ${getImportName(service)} } from '${service.path.replace(
+          /\.ts$/g,
+          '',
+        )}'`,
+    )
+    .join(`\r\n${placeholder}`)
 }
 
 /**
@@ -164,47 +159,47 @@ function generateImportCode(services: service[], placeholder = '') {
  * @returns
  */
 function generateServiceCode(services: service[], placeholder = '') {
-    const generateServices = (items: any, placeholder: string) => {
-        return `${Object.entries(items)
-            .map(([key, name]) => `${key}:${name}`)
-            .join(`,\r\n${placeholder}`)}`
-    }
+  const generateServices = (items: any, placeholder: string) => {
+    return `${Object.entries(items)
+      .map(([key, name]) => `${key}:${name}`)
+      .join(`,\r\n${placeholder}`)}`
+  }
 
-    const generateGroups = () => {
-        const groups = services.reduce((result, item) => {
-            result[item.group] = result[item.group] || {}
-            result[item.group][item.name] = `${item.group}_${item.name}`
-            return result
-        }, {} as any)
+  const generateGroups = () => {
+    const groups = services.reduce((result, item) => {
+      result[item.group] = result[item.group] || {}
+      result[item.group][item.name] = `${item.group}_${item.name}`
+      return result
+    }, {} as any)
 
-        return `${Object.entries(groups)
-            .map(
-                ([group, items]) => `${group}: {
+    return `${Object.entries(groups)
+      .map(
+        ([group, items]) => `${group}: {
           ${generateServices(items, ' '.repeat(10))}
-      }`
-            )
-            .join(',\r\n      ')} `
-    }
+      }`,
+      )
+      .join(',\r\n      ')} `
+  }
 
-    if (services.some(service => !!service.group)) {
-        return `const serviceMap = {
+  if (services.some((service) => !!service.group)) {
+    return `const serviceMap = {
       ${generateGroups()}
   }`
-    } else {
-        return `const serviceMap = {
-      ${services.map(service => service.name).join(`,\r\n${placeholder}`)}
+  } else {
+    return `const serviceMap = {
+      ${services.map((service) => service.name).join(`,\r\n${placeholder}`)}
     }`
-    }
+  }
 }
 
 /**
  * 生成定义文件
  */
 function generateDeclaration(services: service[], serviceDeclaration: string) {
-    const importCode = generateImportCode(services, '  ')
-    const serviceCode = generateServiceCode(services, '    ')
+  const importCode = generateImportCode(services, '  ')
+  const serviceCode = generateServiceCode(services, '    ')
 
-    const declaration = `declare module '${MODULE_ID}' {
+  const declaration = `declare module '${MODULE_ID}' {
   ${importCode}
 
   ${serviceCode}
@@ -215,9 +210,9 @@ function generateDeclaration(services: service[], serviceDeclaration: string) {
 }
 `
 
-    fs.writeFileSync(
-        path.resolve(viteConfig.root, serviceDeclaration ?? DECLARATION_FILE),
-        declaration.replace(/\r\n/g, '\n'),
-        'utf-8'
-    )
+  fs.writeFileSync(
+    path.resolve(viteConfig.root, serviceDeclaration ?? DECLARATION_FILE),
+    declaration.replace(/\r\n/g, '\n'),
+    'utf-8',
+  )
 }

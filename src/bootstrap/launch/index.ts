@@ -1,7 +1,6 @@
 import getAppLaunchTasks from '../launch/app.launch'
 import getUserLaunchTasks from '../launch/user.launch'
 import { useRequest } from 'virtual:http-request'
-import { lastValueFrom } from 'rxjs'
 
 /**
  * 业务启动逻辑
@@ -26,7 +25,7 @@ async function updateUserToken() {
           .login({
             code,
           })
-          .subscribe((data) => {
+          .then((data) => {
             userStore.updateToken({
               accessToken: data.access_token,
               refreshToken: data.refresh_token,
@@ -52,7 +51,7 @@ async function updateUserInfo() {
 
   const appService = useRequest((service) => service.AppService)
 
-  return lastValueFrom(appService.getCurrentUser()).then((data) => {
+  return appService.getCurrentUser().then((data) => {
     userStore.updateCurrent(data)
   })
 }

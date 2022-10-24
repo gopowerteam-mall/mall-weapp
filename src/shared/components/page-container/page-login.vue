@@ -70,15 +70,13 @@ function loginForWeapp() {
   uni.login({
     provider: 'weixin',
     success: ({ code }) => {
-      appService
-        .login({ code })
-        .subscribe(({ access_token, refresh_token }) => {
-          store.updateToken({
-            accessToken: access_token,
-            refreshToken: refresh_token,
-          })
-          submitLoginResult(true)
+      appService.login({ code }).then(({ access_token, refresh_token }) => {
+        store.updateToken({
+          accessToken: access_token,
+          refreshToken: refresh_token,
         })
+        submitLoginResult(true)
+      })
     },
     fail: (ex) => {
       logger.error(ex)

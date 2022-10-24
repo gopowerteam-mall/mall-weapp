@@ -12,7 +12,7 @@
     }
   },
   "scripts": {
-    "update:request": "node ./scripts/generate-request/index.js",
+    "update:request": "npx request-generate",
     "postupdate:request": "prettier --write \"./src/http/**/*.ts\"",
     "log": "conventional-changelog -i README.md -s -r 0",
     "commit": "node ./node_modules/cz-customizable/standalone.js",
@@ -63,6 +63,7 @@
     "@dcloudio/uni-mp-toutiao": "3.0.0-alpha-3050520220824001",
     "@dcloudio/uni-mp-weixin": "3.0.0-alpha-3050520220824001",
     "@dcloudio/uni-quickapp-webview": "3.0.0-alpha-3050520220824001",
+    "@gopowerteam/request": "^0.1.2",
     "@vueuse/core": "9.1.1",
     "class-transformer": "0.5.1",
     "dayjs": "1.11.5",
@@ -81,6 +82,7 @@
     "@dcloudio/uni-cli-shared": "3.0.0-alpha-3050520220824001",
     "@dcloudio/uni-stacktracey": "3.0.0-alpha-3050520220824001",
     "@dcloudio/vite-plugin-uni": "3.0.0-alpha-3050520220824001",
+    "@gopowerteam/request-generate": "^0.1.2",
     "@prettier/plugin-pug": "2.2.0",
     "@types/qs": "6.9.7",
     "@types/svgo": "2.6.4",

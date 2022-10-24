@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid/non-secure'
-import { QiniuService } from '@/http/services/qiniu.service'
+import { QiniuService } from '@/http/services/QiniuService'
 import { appConfig } from '@/config/app.config'
 
 const qiniuService = new QiniuService()
@@ -99,7 +99,7 @@ export class QiniuStorageService implements IStorageService {
 
   private requestToken() {
     // 获取存储服务Token
-    qiniuService.getUploadToken().subscribe(({ token }) => {
+    qiniuService.getUploadToken().then(({ token }) => {
       this.token = token
     })
   }
