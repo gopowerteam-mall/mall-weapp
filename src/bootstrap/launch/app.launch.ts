@@ -1,7 +1,7 @@
 import { useLogin } from '@/shared/hooks'
 import { UpdateService } from '@/shared/utils/update.service'
 import { pages } from '@/pages.json'
-import { useRequest } from 'virtual:http-request'
+import { useRequest } from 'virtual:request'
 
 /**
  * 检测App更新

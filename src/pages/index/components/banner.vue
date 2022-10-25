@@ -17,7 +17,7 @@ fui-swiper-dot(:items='banners')
 
 <script setup lang="ts">
 import { Banner } from '@/http/models/Banner'
-import { useRequest } from 'virtual:http-request'
+import { useRequest } from 'virtual:request'
 
 const bannerService = useRequest((service) => service.HomeService)
 

@@ -1,6 +1,6 @@
 import getAppLaunchTasks from '../launch/app.launch'
 import getUserLaunchTasks from '../launch/user.launch'
-import { useRequest } from 'virtual:http-request'
+import { useRequest } from 'virtual:request'
 
 /**
  * 业务启动逻辑

@@ -52,7 +52,7 @@
 
 <script setup lang="ts">
 import { events } from '@/config/event.config'
-import { useRequest } from 'virtual:http-request'
+import { useRequest } from 'virtual:request'
 
 const logger = useLogger()
 const store = useStore((store) => store.user)
