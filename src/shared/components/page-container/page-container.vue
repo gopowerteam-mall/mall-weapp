@@ -31,7 +31,7 @@ const store = useStore((store) => store.app)
 
 const defaultPadding = 20
 const defaultSpace = 4
-const pageBottomSpace = $ref(0)
+const pageBottomSpace = ref(0)
 
 provide(provides.pageContainer.spaceBottom, pageBottomSpace)
 
@@ -91,7 +91,7 @@ const containerStyle = computed(() => {
         left: '0',
         right: '0',
         top: '0',
-        bottom: `${pageBottomSpace + (props.tabbar ? 46 : 0)}rpx`,
+        bottom: `${pageBottomSpace.value + (props.tabbar ? 46 : 0)}rpx`,
       }
     : {}
 

@@ -2,66 +2,110 @@
 // 自行实现兼容版本
 // 小程序不支持通配符实现暂时支持view,text,button
 @each $var in (1, 2, 3, 4, 5, 6, 7, 8, 9, 10) {
-    .space-x-#{$var} {
-        /* #ifndef MP-WEIXIN */
-        & > *
-        /* #endif */
+  .space-x-#{$var} {
+    /* #ifndef MP-WEIXIN */
+    & > *
+    /* #endif */
 
-        /* #ifdef MP-WEIXIN */
-        & > view,
-        & > text,
-        & > button
-        & > SvgIcon
-        /* #endif */ {
-            margin-left: #{$var * 2}px;
-            margin-right: #{$var * 2}px;
+      /* #ifdef MP-WEIXIN */
+      & > view,
+      & > text,
+      & > button,
+      & > SvgIcon,
+      & > FuiCard
+      /* #endif */ {
+      margin-left: #{$var * 2}px;
+      margin-right: #{$var * 2}px;
 
-            &:first-child {
-                margin-left: 0;
-                margin-right: #{$var * 2}px;
-            }
+      &:last-child {
+        margin-left: #{$var * 2}px;
+        margin-right: 0 !important;
+      }
 
-            &:last-child {
-                margin-left: #{$var * 2}px;
-                margin-right: 0;
-            }
-        }
+      &:first-child {
+        margin-left: 0 !important;
+        margin-right: #{$var * 2}px;
+      }
     }
+  }
 
-    .space-y-#{$var} {
-        /* #ifndef MP-WEIXIN */
-        & > *
-        /* #endif */
+  .space-y-#{$var} {
+    /* #ifndef MP-WEIXIN */
+    & > *
+    /* #endif */
 
-        /* #ifdef MP-WEIXIN */
-        & > view,
-        & > text,
-        & > button
-        /* #endif */ {
-            margin-top: #{$var * 2}px;
-            margin-bottom: #{$var * 2}px;
+      /* #ifdef MP-WEIXIN */
+      & > view,
+      & > text,
+      & > button,
+      & > fui-card
+      /* #endif */ {
+      margin-top: #{$var * 2}px;
+      margin-bottom: #{$var * 2}px;
 
-            &:first-child {
-                margin-top: 0;
-                margin-bottom: #{$var * 2}px;
-            }
+      &:last-child {
+        margin-top: #{$var * 2}px;
+        margin-bottom: 0 !important;
+      }
 
-            &:last-child {
-                margin-top: #{$var * 2}px;
-                margin-bottom: 0;
-            }
-        }
+      &:first-child {
+        margin-top: 0 !important;
+        margin-bottom: #{$var * 2}px;
+      }
     }
+  }
 }
 
 @each $var in (1, 2, 3, 4, 5, 6, 7, 8, 9, 10) {
-    .flex-gap-#{$var} {
-        gap: #{$var * 2}px;
+  .flex-gap-#{$var} {
+    /* #ifndef MP-WEIXIN */
+    & > *
+      /* #endif */
+
+      /* #ifdef MP-WEIXIN */
+      & > view,
+      & > text,
+      & > button,
+      & > fui-card
+      /* #endif */ {
+      margin-right: #{$var * 2}px;
+      margin-bottom: #{$var * 2}px;
     }
+
+    // gap: #{$var * 2}px;
+  }
 }
 
 .flex-center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.inset-0 {
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.inset-x-0 {
+  left: 0;
+  right: 0;
+}
+
+.inset-y-0 {
+  top: 0;
+  bottom: 0;
+}
+
+@each $direction in (left, right, top, bottom) {
+  .#{$direction}-0 {
+    #{$direction}: 0;
+  }
+}
+
+.safe-area {
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
 }

@@ -76,6 +76,23 @@ async function tabbarInterceptor() {
   })
 }
 
+async function appSystemInfo() {
+  const store = useStore((store) => store.app)
+  uni.getSystemInfo({
+    success: function (res) {
+      // uni.showToast({ title: JSON.stringify(res.safeArea) })
+      store.updateSystemInfo({
+        platform: res.platform,
+        screenWidth: res.screenWidth,
+        screenHeight: res.screenHeight,
+        windowWidth: res.windowWidth,
+        windowHeight: res.windowHeight,
+        pixelRatio: res.pixelRatio,
+        safeAreaInsets: res.safeAreaInsets,
+      })
+    },
+  })
+}
 /**
  * 系统启动列表
  * @returns
@@ -83,6 +100,7 @@ async function tabbarInterceptor() {
 export default function appLaunch() {
   return [
     appUpdateCheck(),
+    appSystemInfo(),
     appBaseUpdate(),
     appKeyboardListener(),
     tabbarInterceptor(),

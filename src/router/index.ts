@@ -1,8 +1,8 @@
 import { events } from '@/config/event.config'
+import { base64Decode, base64Encode } from '@/shared/common'
 import { useLogin } from '@/shared/hooks'
 import { onLoad, onUnload } from '@dcloudio/uni-app'
 import qs from 'qs'
-import { lastValueFrom } from 'rxjs'
 import type { ComponentInternalInstance } from 'vue'
 import { pages } from '../pages.json'
 
@@ -17,7 +17,7 @@ type navigateMode = 'push' | 'redirect' | 'relaunch'
  */
 interface navigateOptions {
   mode?: navigateMode
-  query?: { [key: string]: string | number }
+  query?: { [key: string]: any }
   params?: { [key: string]: any }
   events?: { [key: string]: (...params: any[]) => void }
 }
@@ -58,16 +58,15 @@ class Router {
 
   private onRouterInit() {
     const setQuery = (query) => {
-      this.query = query
+      this.query = this.decodeQuery(query)
 
       if (this.page) {
-        this.page.query = query
+        this.page.query = this.query
       }
     }
 
     const setParams = () => {
       const [page, beforePage] = getCurrentPages().reverse()
-
       if (beforePage) {
         const params = routers.get(beforePage)?.getRouterParams()
         this.params = params || {}
@@ -89,12 +88,17 @@ class Router {
   }
 
   public getPath() {
-    return `/${get(this.page, 'route')}` as RouterPages
+    const { router, fullPath } = get(this.page) || {}
+
+    return `/${(router || fullPath || '').replace(/^\//, '')}` as RouterPages
   }
 
   public getOpenerEventChannel() {
     if (this.instance && this.instance.proxy) {
-      return this.instance.proxy.getOpenerEventChannel()
+      const getOpenerEventChannel =
+        this.instance.proxy?.['getOpenerEventChannel']
+
+      return getOpenerEventChannel && getOpenerEventChannel()
     }
   }
 
@@ -117,6 +121,32 @@ class Router {
     const login = useLogin()
 
     return login.show()
+  }
+
+  private decodeQuery(query = {}) {
+    return Object.entries(query).reduce(
+      (result, [key, value]) => (
+        (result[key] =
+          typeof value === 'string' && value.startsWith('__object__')
+            ? JSON.parse(base64Decode(value.replace(/^__object__/g, '')))
+            : value),
+        result
+      ),
+      {},
+    )
+  }
+
+  private encodeQuery(query) {
+    return Object.entries(query).reduce(
+      (result, [key, value]) => (
+        (result[key] =
+          typeof value === 'object'
+            ? `__object__${base64Encode(JSON.stringify(value))}`
+            : value),
+        result
+      ),
+      {},
+    )
   }
 
   /**
@@ -152,7 +182,7 @@ class Router {
 
     const navigateUrl = `${path}${
       options.query
-        ? qs.stringify(options.query, {
+        ? qs.stringify(this.encodeQuery(options.query), {
             addQueryPrefix: true,
             encode: false,
           })
@@ -195,8 +225,9 @@ class Router {
       params !== undefined
     ) {
       const { proxy } = this.instance
+      const getOpenerEventChannel = proxy?.['getOpenerEventChannel']
 
-      const eventChannel = proxy.getOpenerEventChannel()
+      const eventChannel = getOpenerEventChannel()
 
       eventChannel && eventChannel.emit(events.router.back, params)
     }

@@ -1,5 +1,5 @@
 <template lang="pug">
-PageContainer(:space='5')
+PageContainer(:space='5' tabbar)
   view: Banner
   view: Category
   view: Recommand

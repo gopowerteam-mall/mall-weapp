@@ -68,6 +68,13 @@ export const store = defineStore('app', {
     updateBasis(data: AppBasisData) {
       this.basis = data
     },
+    /**
+     * 更新系统信息
+     * @param systemInfo
+     */
+    updateSystemInfo(systemInfo: AppSystemInfo) {
+      this.systemInfo = systemInfo
+    },
   },
 })
 
