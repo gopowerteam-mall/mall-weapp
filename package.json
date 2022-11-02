@@ -38,7 +38,7 @@
     "@dcloudio/uni-components": "3.0.0-alpha-3060720221018007",
     "@dcloudio/uni-h5": "3.0.0-alpha-3060720221018007",
     "@dcloudio/uni-mp-weixin": "3.0.0-alpha-3060720221018007",
-    "@gopowerteam/request": "^0.1.5",
+    "@gopowerteam/request": "^0.1.6",
     "@vueuse/core": "9.3.1",
     "class-transformer": "0.5.1",
     "dayjs": "1.11.6",

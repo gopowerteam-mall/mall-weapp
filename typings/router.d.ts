@@ -4,3 +4,5 @@ declare type RouterPages =
     | '/pages/cart/index'
     | '/pages/mine/index'
     | '/pages/demo/index'
+    | '/pages/project/index'
+    | '/pages/browser/index'

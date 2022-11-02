@@ -14,4 +14,7 @@ export const events = {
     params: 'ON_ROUTER_PARAMS',
     back: 'ON_ROUTER_BACK',
   },
+  category: {
+    switch: 'ON_SWITCH_CATEGORY',
+  },
 } as const

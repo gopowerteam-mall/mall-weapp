@@ -3,7 +3,6 @@ import { resolve } from 'path'
 import autoImportLibs from './auto-import'
 import uni from '@dcloudio/vite-plugin-uni'
 import eslint from 'vite-plugin-eslint'
-import request from '@gopowerteam/request-generate/vite-plugin'
 import router from './scripts/vite-plugins/router'
 import component from './scripts/vite-plugins/component'
 import autoImport from 'unplugin-auto-import/vite'
@@ -14,6 +13,7 @@ import { presetAttributifyWechat } from 'unplugin-unocss-attributify-wechat/vite
 import extractorPug from '@unocss/extractor-pug'
 import { extractorSplit } from '@unocss/core'
 import assets from './scripts/vite-plugins/assets'
+import request from '@gopowerteam/request-generate/vite-plugin'
 
 // https://vitejs.dev/config/
 export default defineConfig({

@@ -1,5 +1,6 @@
 <template lang="pug">
-image.image(:mode='mode' :src='url' :style='imageStyle' @click='onPreviewImage')
+image-container
+  image(:mode='mode' :src='url' :style='customStyle' @click='onPreviewImage')
 </template>
 
 <script setup lang="ts">
@@ -12,6 +13,10 @@ interface Props {
   scene?: DisplayScene
   preview?: boolean
   imageStyle?: string
+  rounded?: boolean
+  width?: string
+  height?: string
+  gap?: number
 }
 
 const appStore = useStore((store) => store.app)
@@ -20,14 +25,28 @@ const props = withDefaults(defineProps<Props>(), {
   preview: false,
   mode: 'aspectFit',
   scene: DisplayScene.Normal,
+  rounded: false,
+  width: '',
+  height: '',
   imageStyle: '',
+  gap: 0,
 })
+
+const emits = defineEmits(['click'])
 
 function getImageSuffix(scene: DisplayScene) {
   // TODO:获取图片样式
 
   return scene === DisplayScene.Normal ? '' : ''
 }
+
+const customStyle = computed(
+  () =>
+    (props.width ? `width:${props.width};` : '') +
+    (props.height ? `height:${props.height};` : '') +
+    (props.rounded ? 'border-radius:100%;' : '') +
+    props.imageStyle,
+)
 
 /**
  * 获取图片相应地址
@@ -63,6 +82,8 @@ const url = asyncComputed(
 )
 
 function onPreviewImage() {
+  emits('click')
+
   if (!props.preview) {
     return
   }
@@ -78,9 +99,11 @@ function onPreviewImage() {
 </script>
 
 <style lang="scss" scoped>
-.image {
-  max-width: 100%;
-  max-height: 100%;
-  height: 100%;
+.image-container {
+  image {
+    max-width: 100%;
+    max-height: 100%;
+    height: 100%;
+  }
 }
 </style>

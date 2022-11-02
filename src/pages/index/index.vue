@@ -1,8 +1,8 @@
 <template lang="pug">
-PageContainer
-  Banner
-  Category
-  Recommand
+PageContainer(:space='5')
+  view: Banner
+  view: Category
+  view: Recommand
 </template>
 
 <script setup lang="ts">
