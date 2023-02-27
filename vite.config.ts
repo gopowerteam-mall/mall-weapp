@@ -1,77 +1,29 @@
 import { defineConfig } from 'vite'
-import { resolve } from 'path'
-import autoImportLibs from './auto-import'
+import { defineVitePlugins } from './.vite/plugins'
+import { defineViteResolve } from './.vite/resolve'
+import { defineViteCSS } from './.vite/css'
 import uni from '@dcloudio/vite-plugin-uni'
-import eslint from 'vite-plugin-eslint'
-import router from './scripts/vite-plugins/router'
-import component from './scripts/vite-plugins/component'
-import autoImport from 'unplugin-auto-import/vite'
-import svg from './scripts/vite-plugins/svg-icon'
-import Unocss from 'unocss/vite'
-import transformWeClass from 'unplugin-transform-we-class/vite'
-import { presetAttributifyWechat } from 'unplugin-unocss-attributify-wechat/vite'
-import extractorPug from '@unocss/extractor-pug'
-import { extractorSplit } from '@unocss/core'
-import assets from './scripts/vite-plugins/assets'
-import request from '@gopowerteam/request-generate/vite-plugin'
+import {
+  attributifyToClass,
+  defaultIgnoreNonValuedAttributes,
+} from 'unplugin-attributify-to-class/vite'
+import transformClass from 'unplugin-transform-class/vite'
 
-// https://vitejs.dev/config/
 export default defineConfig({
-  resolve: {
-    alias: {
-      '@': `${resolve(__dirname, 'src')}`,
-    },
-  },
-  plugins: [
+  ...defineViteResolve(),
+  // ...defineViteCSS(),
+  ...defineVitePlugins([
     uni({ vueOptions: { reactivityTransform: true } }),
-    process.env.UNI_COMPILER !== 'nvue'
-      ? Unocss({
-          extractors: [extractorPug(), extractorSplit],
-        })
-      : undefined,
-    // https://github.com/MellowCo/unplugin-unocss-attributify-wechat
-    presetAttributifyWechat({
-      // options
+    transformClass(),
+    attributifyToClass({
+      // open valueless attributify
+      nonValuedAttribute: true,
+      // ignore non-valued attributes
+      ignoreNonValuedAttributes: [
+        ...defaultIgnoreNonValuedAttributes,
+        'my-prop',
+        'is-top',
+      ],
     }),
-
-    // https://github.com/MellowCo/unplugin-transform-we-class
-    transformWeClass({
-      // options
-    }),
-    eslint({
-      fix: true,
-      include: ['src/**/*.{vue,ts,tsx}'],
-    }),
-    svg({
-      dir: 'src/assets/icons',
-      dts: 'typings/icons.d.ts',
-    }),
-    router({
-      dts: 'typings/router.d.ts',
-    }),
-    component({
-      dts: 'typings/component.d.ts',
-    }),
-    request({
-      alias: '@',
-      dir: 'src/http/services',
-      dts: 'typings/request.d.ts',
-    }),
-    autoImport({
-      dts: 'typings/auto-imports.d.ts',
-      include: [/\.tsx?$/, /\.vue\??/],
-      imports: autoImportLibs,
-      vueTemplate: true,
-      eslintrc: {
-        enabled: true,
-      },
-    }),
-
-    assets({
-      dts: 'typings/assets.d.ts',
-      dirs: {
-        images: 'images',
-      },
-    }),
-  ],
+  ]),
 })
