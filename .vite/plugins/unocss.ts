@@ -2,11 +2,21 @@ import unocss from 'unocss/vite'
 import extractorPug from '@unocss/extractor-pug'
 import { extractorSplit } from '@unocss/core'
 import presetWeapp from 'unocss-preset-weapp'
+import {
+  transformerAttributify,
+  transformerClass,
+} from 'unocss-preset-weapp/transformer'
 
 export default process.env.UNI_COMPILER !== 'nvue'
   ? unocss({
       presets: [presetWeapp()],
       extractors: [extractorPug(), extractorSplit],
+      transformers: [
+        // https://github.com/MellowCo/unocss-preset-weapp/tree/main/src/transformer/transformerAttributify
+        transformerAttributify(),
+        // https://github.com/MellowCo/unocss-preset-weapp/tree/main/src/transformer/transformerClass
+        transformerClass(),
+      ],
       shortcuts: [['flex-center', 'flex justify-center items-center']],
       safelist: [
         ...Array.from({ length: 10 }, (_, i) => `space-x-${i + 1}`),

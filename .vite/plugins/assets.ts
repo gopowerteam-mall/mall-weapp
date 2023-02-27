@@ -265,7 +265,7 @@ function assets(options: {
       // 删除本地已上传的静态资源
       if (isProduction) {
         Object.entries(options.dirs).forEach(([key, dir]) => {
-          rimraf(path.resolve(ASSET_OUTPUT_DIR, dir), () => {
+          rimraf(path.resolve(ASSET_OUTPUT_DIR, dir)).then(() => {
             console.log(`[静态资源删除完成] static/${dir}`)
           })
         })
